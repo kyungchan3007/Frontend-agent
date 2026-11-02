@@ -9,6 +9,9 @@
 
 ## 파일 계획
 - README.md
+- CHANGELOG.md
+- CONTRIBUTING.md
+- .github/ISSUE_TEMPLATE/**
 - package.json
 - assets/**
 - experiments/frontend/design.md

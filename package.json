@@ -1,5 +1,5 @@
 {
-  "name": "frontend-agent-bench",
+  "name": "frontend-agent",
   "private": true,
   "type": "module",
   "scripts": {

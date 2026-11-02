@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎨 frontend-agent-bench
+# 🎨 Frontend-agent
 
 **AI 에이전트 실험 결과를 프론트엔드에 어떻게 적용할까**
 
@@ -53,7 +53,7 @@
 
 ### 🚦 하네스 실험
 
-[harness-template](https://github.com/kyungchan3007/harness-template)
+[harness-lab](https://github.com/kyungchan3007/Harness)
 
 - **결과**
   - 규칙을 문서에서 검사로 옮기면 93.7% → 99.1%
