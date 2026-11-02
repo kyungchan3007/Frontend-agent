@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { FOUR, S, TWENTY, mockApi, nameInput } from '../../../starter/tools/mock.mjs';
+import { FOUR, S, TWENTY, mockApi, nameInput, pickStandard, pressAdd } from '../../../starter/tools/mock.mjs';
 
 const start = (p) => p.getByRole('button', { name: /측정 시작$/ });
 const add = (p) => p.getByRole('button', { name: '추가하기' });
@@ -13,7 +13,7 @@ const OFFLINE_BANNER = '인터넷 연결이 없어요';
 async function fillForm(page, name) {
   await openForm(page);
   await nameInput(page).fill(name);
-  await page.getByText('수학', { exact: true }).last().click();
+  await pickStandard(page, '수학');
   await page.locator('[aria-label="green"]').click();
 }
 
@@ -102,12 +102,22 @@ test.describe('이름 길이', () => {
   });
 });
 
+test.describe('폼 모양', () => {
+  test('F1 표준 과목은 누르는 칩으로 보인다', async ({ page }) => {
+    await mockApi(page);
+    await page.goto('/');
+    await openForm(page);
+    await expect(page.locator('select')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '제2외국어', exact: true })).toBeVisible();
+  });
+});
+
 test.describe('같은 이름', () => {
   test('D1 있는 이름으로 추가하면 오류', async ({ page }) => {
     await mockApi(page);
     await page.goto('/');
     await fillForm(page, '수학 · 미적분');
-    await add(page).click();
+    await pressAdd(page);
     await expectBelowInput(page, SAME);
     await expect(add(page)).toBeDisabled();
   });
@@ -115,7 +125,7 @@ test.describe('같은 이름', () => {
     await mockApi(page);
     await page.goto('/');
     await fillForm(page, '수학 · 미적분');
-    await add(page).click();
+    await pressAdd(page);
     await nameInput(page).fill('수학 · 기하');
     await expect(page.getByText(SAME)).toHaveCount(0);
     await expect(add(page)).toBeEnabled();
@@ -124,7 +134,7 @@ test.describe('같은 이름', () => {
     await mockApi(page, { createSubject: (r, json) => json(r, 409, { code: 'SUBJECT_NAME_TAKEN' }) });
     await page.goto('/');
     await fillForm(page, '물리');
-    await add(page).click();
+    await pressAdd(page);
     await expectBelowInput(page, SAME);
   });
 });
@@ -134,7 +144,7 @@ test.describe('개수 제한', () => {
     await mockApi(page, { subjects: TWENTY });
     await page.goto('/');
     await fillForm(page, '물리');
-    await add(page).click();
+    await pressAdd(page);
     await expectBelowInput(page, LIMIT);
     await expect(add(page)).toBeDisabled();
   });
@@ -142,7 +152,7 @@ test.describe('개수 제한', () => {
     await mockApi(page, { createSubject: (r, json) => json(r, 409, { code: 'SUBJECT_LIMIT' }) });
     await page.goto('/');
     await fillForm(page, '물리');
-    await add(page).click();
+    await pressAdd(page);
     await expectBelowInput(page, LIMIT);
   });
 });

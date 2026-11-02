@@ -56,10 +56,11 @@ function claude(cwd) {
       '--setting-sources', 'project', '--strict-mcp-config', '--no-session-persistence',
     ], { cwd, env, stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';
+    let err = '';
     child.stdout.on('data', (d) => (out += d));
-    child.stderr.on('data', () => {});
+    child.stderr.on('data', (d) => (err += d));
     const t = setTimeout(() => child.kill('SIGKILL'), TIMEOUT_MS);
-    child.on('close', (_, signal) => { clearTimeout(t); resolve({ out, timedOut: signal === 'SIGKILL' }); });
+    child.on('close', (code, signal) => { clearTimeout(t); resolve({ out, err, code, signal, timedOut: signal === 'SIGKILL' }); });
   });
 }
 
@@ -69,12 +70,21 @@ await fs.mkdir(runDir, { recursive: true });
 async function one(cond, rep, port) {
   const outDir = path.join(runDir, cond, `rep${rep}`);
   await fs.mkdir(outDir, { recursive: true });
-  const work = await prepare(cond);
-  const { out, timedOut } = await claude(work);
-  await fs.writeFile(path.join(outDir, 'steps.jsonl'), out);
+  // 결과 줄 없이 끝난 실행은 과제와 상관없는 중단이므로 한 번 다시 돌린다
+  let work, out, timedOut, attempts = 0;
+  do {
+    attempts += 1;
+    if (work) await fs.rm(work, { recursive: true, force: true });
+    work = await prepare(cond);
+    const r = await claude(work);
+    ({ out, timedOut } = r);
+    await fs.writeFile(path.join(outDir, `steps-try${attempts}.jsonl`), out);
+    await fs.writeFile(path.join(outDir, `stderr-try${attempts}.txt`), `code ${r.code} signal ${r.signal}\n${r.err}`);
+  } while (attempts < 2 && !timedOut && !out.includes('"type":"result"'));
   const events = out.split('\n').filter(Boolean).flatMap((l) => { try { return [JSON.parse(l)]; } catch { return []; } });
   const last = events.findLast((e) => e.type === 'result');
   const uses = events.filter((e) => e.type === 'assistant').flatMap((e) => e.message?.content ?? []).filter((c) => c.type === 'tool_use');
+  const bash = uses.filter((u) => u.name === 'Bash').map((u) => String(u.input.command));
   const reads = uses.filter((u) => u.name === 'Read').map((u) => u.input.file_path ?? '');
   const g = await grade(work, path.join(outDir, 'grade'), port);
   await fs.cp(path.join(work, 'src'), path.join(outDir, 'src'), { recursive: true });
@@ -82,14 +92,16 @@ async function one(cond, rep, port) {
   const result = {
     condition: cond, rep, ...g,
     costUsd: last?.total_cost_usd ?? null, durationMs: last?.duration_ms ?? null, turns: last?.num_turns ?? null,
-    panelReads: reads.filter((r) => r.includes('/panels/')).length, mapRead: reads.some((r) => r.endsWith('design-map.md')),
-    gateRuns: uses.filter((u) => u.name === 'Bash' && String(u.input.command).includes('check.mjs')).length,
-    shotRuns: uses.filter((u) => u.name === 'Bash' && String(u.input.command).includes('shot.mjs')).length,
+    panelReads: reads.filter((r) => r.includes('/panels/')).length,
+    mapRead: reads.some((r) => r.endsWith('design-map.md')) || bash.some((c) => c.includes('design-map.md')),
+    gateRuns: bash.filter((c) => /node (\S*\/)?tools\/check\.mjs/.test(c)).length,
+    shotRuns: bash.filter((c) => /node (\S*\/)?tools\/shot\.mjs/.test(c)).length,
+    attempts,
     permissionDenials: last?.permission_denials?.length ?? null, timedOut, isError: last ? Boolean(last.is_error) : true,
   };
   await fs.writeFile(path.join(outDir, 'result.json'), JSON.stringify(result, null, 2));
   await fs.appendFile(path.join(runDir, 'results.jsonl'), JSON.stringify(result) + '\n');
-  console.log(`${cond} rep${rep}  ${result.pass}/${result.total}  픽셀 ${result.pixelAvg}  $${result.costUsd?.toFixed(2)}  ${Math.round((result.durationMs ?? 0) / 1000)}s  패널 ${result.panelReads}  게이트 ${result.gateRuns}  실패: ${result.failed.join(', ')}`);
+  console.log(`${cond} rep${rep}  ${result.pass}/${result.total}  픽셀 ${result.pixelAvg}  $${result.costUsd?.toFixed(2)}  ${Math.round((result.durationMs ?? 0) / 1000)}s  패널 ${result.panelReads}  게이트 ${result.gateRuns}  화면 ${result.shotRuns}  시도 ${attempts}  실패: ${result.failed.join(', ')}`);
 }
 
 const jobs = [];

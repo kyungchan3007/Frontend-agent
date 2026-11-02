@@ -26,6 +26,8 @@ export async function mockApi(page, { subjects = FOUR, session = null, createSub
       const body = req.postDataJSON();
       calls.subjects.push(body);
       if (createSubject) return createSubject(route, json, body);
+      if (subjects.some((s) => s.name === body.name)) return json(route, 409, { code: 'SUBJECT_NAME_TAKEN' });
+      if (subjects.filter((s) => !s.archived).length >= 20) return json(route, 409, { code: 'SUBJECT_LIMIT' });
       return json(route, 201, S('new', body.name, body.standardSubject, body.color, 0, null));
     }
     if (req.method() === 'POST' && url === '/api/sessions') {
@@ -42,12 +44,26 @@ export async function mockApi(page, { subjects = FOUR, session = null, createSub
 // 시안과 같은 상태로 화면을 맞춘다
 export const nameInput = (page) => page.locator('input[type="text"], input:not([type])').first();
 
+// 미리 꺼 두는 구현과 눌렀을 때 막는 구현을 모두 받는다
+export async function pressAdd(page) {
+  const add = page.getByRole('button', { name: '추가하기' });
+  await page.waitForTimeout(100);
+  if (await add.isEnabled()) await add.click();
+}
+
+// 표준 과목을 고르는 모양이 달라도 동작은 따로 채점한다
+export async function pickStandard(page, standard) {
+  const select = page.locator('select');
+  if (await select.count()) return select.first().selectOption(standard);
+  await page.getByText(standard, { exact: true }).last().click();
+}
+
 async function openForm(page, name, standard, color, submit) {
   await page.getByRole('button', { name: /새 과목 추가/ }).click();
   await nameInput(page).fill(name);
-  await page.getByText(standard, { exact: true }).last().click();
+  await pickStandard(page, standard);
   await page.locator(`[aria-label="${color}"]`).click();
-  if (submit) await page.getByRole('button', { name: '추가하기' }).click();
+  if (submit) await pressAdd(page);
 }
 
 export const STATES = {
