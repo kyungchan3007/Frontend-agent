@@ -2,3 +2,6 @@ node_modules/
 .tmp/
 .DS_Store
 .claude/settings.local.json
+experiments/frontend/package-lock.json
+experiments/frontend/runs/
+test-results/
