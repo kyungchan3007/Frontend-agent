@@ -1,0 +1,20 @@
+# 항상 보호 — 사람 승인 없이 바꾸지 않는 파일 (glob, 한 줄에 하나)
+# 승인할 때: ALLOW_PROTECTED=1 bash .agents/checks.sh   (사람만 쓴다)
+
+# 하네스 자체
+AGENTS.md
+CLAUDE.md
+.agents/checks.sh
+.agents/protected.txt
+.agents/scripts/**
+.claude/settings.json
+.github/workflows/**
+
+# 의존성
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 프로젝트에 맞게 추가 (예)
+# src/api/generated/**
+# app.json

@@ -1,0 +1,45 @@
+name: 🐞 에이전트 실수 보고
+description: AI 코딩 에이전트가 실제로 한 실수를 알려 주세요. 같은 실수가 2건 모이면 규칙 후보가 됩니다.
+labels: ["실수-보고"]
+body:
+  - type: textarea
+    id: task
+    attributes:
+      label: 무엇을 시켰나
+      description: 에이전트에게 준 요청 (민감한 내용은 빼 주세요)
+      placeholder: 장바구니 수량 0 허용 버그 고쳐 줘
+    validations:
+      required: true
+  - type: textarea
+    id: mistake
+    attributes:
+      label: 무슨 실수를 했나
+      placeholder: 테스트를 통과시키려고 기존 테스트의 기대값을 바꿈
+    validations:
+      required: true
+  - type: dropdown
+    id: caught
+    attributes:
+      label: 게이트가 잡았나
+      options:
+        - 잡았다 (차단)
+        - 경고만 했다
+        - 못 잡았다
+        - 템플릿을 쓰지 않는 환경
+    validations:
+      required: true
+  - type: input
+    id: count
+    attributes:
+      label: 몇 번 봤나
+      placeholder: 5번 중 3번
+  - type: input
+    id: env
+    attributes:
+      label: 모델 · 도구
+      placeholder: Claude Code · Haiku 4.5 / Codex
+  - type: input
+    id: version
+    attributes:
+      label: 템플릿 버전
+      placeholder: v0.1.0

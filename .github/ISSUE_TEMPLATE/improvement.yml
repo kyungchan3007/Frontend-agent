@@ -1,0 +1,36 @@
+name: 💡 하네스 개선 제안
+description: 새 검사 · 훅 · 린트 아이디어. 막으려는 실수를 먼저 적어 주세요.
+labels: ["규칙-후보"]
+body:
+  - type: textarea
+    id: mistake
+    attributes:
+      label: 어떤 실수를 막나
+      description: 실제로 본 실수여야 합니다. 관련 실수 보고 이슈가 있으면 링크해 주세요.
+    validations:
+      required: true
+  - type: input
+    id: seen
+    attributes:
+      label: 몇 번 봤나
+      placeholder: "3번 (#12, #15)"
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: 어떻게 막나
+      placeholder: scope-check 에 … 를 추가해 경고
+  - type: dropdown
+    id: level
+    attributes:
+      label: 차단할까, 경고할까
+      options:
+        - 차단 (확실한 실수)
+        - 경고 (정당한 경우도 있음)
+  - type: textarea
+    id: code
+    attributes:
+      label: 코드 예시 (선택)
+      description: 원본에는 PR 대신 이슈로 받습니다. Fork 에서 만든 코드나 링크를 붙여 주세요.
+      render: javascript

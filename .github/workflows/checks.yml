@@ -1,0 +1,21 @@
+name: checks
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  push:
+    branches: [main]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: if [ -f package-lock.json ]; then npm ci; fi
+      - run: bash .agents/checks.sh
+        env:
+          # 보호 파일 변경은 PR에 harness-approved 라벨을 사람이 붙였을 때만 통과
+          ALLOW_PROTECTED: ${{ contains(github.event.pull_request.labels.*.name, 'harness-approved') && '1' || '0' }}

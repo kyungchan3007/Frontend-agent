@@ -1,0 +1,10 @@
+{
+  "name": "harness-template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "bash .agents/checks.sh",
+    "spec:new": "node .agents/scripts/new-spec.mjs",
+    "test:harness": "node --test .agents/scripts/harness.test.mjs"
+  }
+}
