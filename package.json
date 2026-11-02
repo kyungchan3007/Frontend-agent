@@ -1,5 +1,5 @@
 {
-  "name": "harness-template",
+  "name": "frontend-agent-bench",
   "private": true,
   "type": "module",
   "scripts": {
