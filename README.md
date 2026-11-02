@@ -4,11 +4,7 @@
 
 **AI 에이전트 실험 결과를 프론트엔드에 어떻게 적용할까**
 
-온톨로지 · 감독관 · 하네스 실험에서 나온 결과를 프론트엔드 작업 방식으로 옮기고, 실제 시안으로 확인합니다.
-
-![Status](https://img.shields.io/badge/status-실험%20준비-orange)
-![Stack](https://img.shields.io/badge/React%20·%20Vite%20·%20Tailwind-61DAFB?logo=react&logoColor=black)
-![Test](https://img.shields.io/badge/Playwright-45ba4b?logo=playwright&logoColor=white)
+온톨로지 · 감독관 · 하네스 실험에서 나온 결과를 프론트엔드 작업 방식으로 옮겼습니다.
 
 </div>
 
@@ -115,38 +111,6 @@ flowchart LR
 작은 프로젝트는 위쪽 단계만 둬도 됩니다.
 
 ---
-
-## 🔬 실제 시안으로 확인하기
-
-공부 시간 측정 앱 **공부반장**의 Figma 시안을 웹으로 구현해 확인합니다.
-
-<div align="center">
-<img src="assets/screen-subject-select.png" width="240" alt="공부반장 과목 선택 시안">
-</div>
-
-| 조건 | 시안 전달 | 자동 게이트 | 브라우저 확인 |
-|---|---:|---:|---:|
-| A | 이미지만 | ❌ | ❌ |
-| B | 이미지 + 패널 + 지도 | ❌ | ❌ |
-| C | 이미지 + 패널 + 지도 | ✅ | ❌ |
-| D | 이미지 + 패널 + 지도 | ✅ | ✅ |
-
-- 규모 3개 × 조건 4개 × 3회 = **36회**
-- 전체 설계: [experiments/frontend/design.md](experiments/frontend/design.md)
-
-### 진행 상황
-
-- [x] 실험 설계
-- [ ] 소형 과제 준비
-- [ ] 소형 시험 실행
-- [ ] 전체 36회 실행
-- [ ] 결과를 반영해 이 문서 고치기
-
----
-
-## 📊 결과
-
-아직 없습니다. 실행이 끝나면 맞지 않은 가설도 그대로 적습니다.
 
 <div align="center">
 
