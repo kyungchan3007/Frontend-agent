@@ -1,0 +1,144 @@
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index 2be5567..41dbd34 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -4,6 +4,7 @@ import { createPlan, getPlans } from '../../api/plans';
+ import { useSubjects } from '../../shared';
+ import type { Plan } from '../../types';
+ import { BottomSheet, Button, Chip, Pressable, SubjectDot, TextField } from '../../ui/index.js';
++import SaveButton from './SaveButton.jsx';
+ import Toggle from './Toggle.jsx';
+ 
+ const REPEAT = [['none', '안 함'], ['daily', '매일'], ['weekdays', '평일'], ['custom', '요일 선택']];
+@@ -17,6 +18,7 @@ export default function PlanSheet() {
+   const [end, setEnd] = useState('21:00');
+   const [repeat, setRepeat] = useState('weekdays');
+   const [notify, setNotify] = useState(true);
++  const [saving, setSaving] = useState(false);
+ 
+   useEffect(() => {
+     getPlans().then(({ data }) => setPlans(data.plans));
+@@ -28,8 +30,13 @@ export default function PlanSheet() {
+   const overlap = plans.some((p) => start < p.end && p.start < end);
+ 
+   const save = async () => {
+-    const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
+-    if (status === 201) navigate('/');
++    setSaving(true);
++    try {
++      const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
+   };
+ 
+   if (listing) {
+@@ -73,7 +80,7 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <Button className="mt-4 w-full" disabled={end <= start} onClick={save}>저장하기</Button>
++      <SaveButton className="mt-4 w-full" pending={saving} disabled={end <= start} onClick={save}>저장하기</SaveButton>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/screens/plan-sheet/SaveButton.jsx b/src/screens/plan-sheet/SaveButton.jsx
+new file mode 100644
+index 0000000..5543537
+--- /dev/null
++++ b/src/screens/plan-sheet/SaveButton.jsx
+@@ -0,0 +1,12 @@
++import { Button } from '../../ui/index.js';
++
++export default function SaveButton({ pending, disabled, children, ...rest }) {
++  return (
++    <Button disabled={disabled || pending} {...rest}>
++      {pending && (
++        <span aria-hidden="true" className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
++      )}
++      {children}
++    </Button>
++  );
++}
+diff --git a/src/screens/subject-manager/AddButton.jsx b/src/screens/subject-manager/AddButton.jsx
+new file mode 100644
+index 0000000..34cfc73
+--- /dev/null
++++ b/src/screens/subject-manager/AddButton.jsx
+@@ -0,0 +1,10 @@
++import { Button } from '../../ui/index.js';
++
++export default function AddButton({ children, ...rest }) {
++  return (
++    <Button {...rest}>
++      <span aria-hidden="true" className="mr-2">＋</span>
++      {children}
++    </Button>
++  );
++}
+diff --git a/src/screens/subject-manager/SubjectManager.tsx b/src/screens/subject-manager/SubjectManager.tsx
+index 7a199ae..97ddf03 100644
+--- a/src/screens/subject-manager/SubjectManager.tsx
++++ b/src/screens/subject-manager/SubjectManager.tsx
+@@ -2,7 +2,8 @@ import { useState } from 'react';
+ import { navigate } from '../../App';
+ import { createSubject } from '../../api/subjects';
+ import { STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, isNameTooLong, useSubjects } from '../../shared';
+-import { Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
++import { Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
++import AddButton from './AddButton.jsx';
+ 
+ export default function SubjectManager() {
+   const { subjects, setSubjects: setAll, all, loading } = useSubjects();
+@@ -49,7 +50,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+       </section>
+       {archived > 0 && <p className="mt-3 text-[13px] text-secondary">보관한 과목 {archived}개 ›</p>}
+-      <Button className="mt-auto w-full" disabled={!can} onClick={submit}>과목 추가하기</Button>
++      <AddButton className="mt-auto w-full" disabled={!can} onClick={submit}>과목 추가하기</AddButton>
+     </div>
+   );
+ }
+diff --git a/src/screens/subject-sheet/StartButton.jsx b/src/screens/subject-sheet/StartButton.jsx
+new file mode 100644
+index 0000000..0d25a9f
+--- /dev/null
++++ b/src/screens/subject-sheet/StartButton.jsx
+@@ -0,0 +1,12 @@
++import { Button } from '../../ui/index.js';
++
++export default function StartButton({ sub, children, ...rest }) {
++  return (
++    <Button {...rest}>
++      <span className="flex flex-col items-center leading-tight">
++        <span>{children}</span>
++        {sub && <span aria-hidden="true" className="text-[11px] font-medium">{sub}</span>}
++      </span>
++    </Button>
++  );
++}
+diff --git a/src/screens/subject-sheet/SubjectSheet.tsx b/src/screens/subject-sheet/SubjectSheet.tsx
+index bf7d4b3..8666fb2 100644
+--- a/src/screens/subject-sheet/SubjectSheet.tsx
++++ b/src/screens/subject-sheet/SubjectSheet.tsx
+@@ -6,6 +6,7 @@ import { NAME_MAX, STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, activeSubjects, i
+ import type { Subject } from '../../types';
+ import { BottomSheet, Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
+ import OfflineBanner from './OfflineBanner.jsx';
++import StartButton from './StartButton.jsx';
+ import Toast from './Toast.jsx';
+ 
+ const MESSAGES = {
+@@ -149,9 +150,9 @@ export default function SubjectSheet() {
+             )}
+             <Button variant="ghost" size="M" className="mt-3 w-full" onClick={() => setForm(true)}>＋ 새 과목 추가</Button>
+             {subjects.length > 0 && (
+-              <Button className="mt-3 w-full" onClick={start}>
++              <StartButton className="mt-3 w-full" sub={`오늘 ${formatToday(current?.todaySeconds)}`} onClick={start}>
+                 {session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}
+-              </Button>
++              </StartButton>
+             )}
+           </div>
+         )}

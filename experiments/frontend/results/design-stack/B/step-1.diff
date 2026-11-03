@@ -1,0 +1,37 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index cd66410..478ecbf 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -16,6 +16,7 @@ export default function PlanSheet() {
+   const [end, setEnd] = useState('21:00');
+   const [repeat, setRepeat] = useState('weekdays');
+   const [notify, setNotify] = useState(true);
++  const [saving, setSaving] = useState(false);
+ 
+   useEffect(() => {
+     getPlans().then(({ data }) => setPlans(data.plans));
+@@ -27,8 +28,13 @@ export default function PlanSheet() {
+   const overlap = plans.some((p) => start < p.end && p.start < end);
+ 
+   const save = async () => {
+-    const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
+-    if (status === 201) navigate('/');
++    setSaving(true);
++    try {
++      const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
+   };
+ 
+   if (listing) {
+@@ -82,7 +88,7 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-4 w-full`} disabled={end <= start} onClick={save}>저장하기</Button>
++      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-4 w-full`} disabled={end <= start || saving} onClick={save}>{saving && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}저장하기</Button>
+     </BottomSheet>
+   );
+ }

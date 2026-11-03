@@ -1,0 +1,161 @@
+diff --git a/src/screens/exam-sheet/ExamSheet.tsx b/src/screens/exam-sheet/ExamSheet.tsx
+index faeaea8..7792fb2 100644
+--- a/src/screens/exam-sheet/ExamSheet.tsx
++++ b/src/screens/exam-sheet/ExamSheet.tsx
+@@ -37,7 +37,7 @@ export default function ExamSheet() {
+       </div>
+       <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
+       <div className="mt-2 flex flex-wrap gap-2">
+-        {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
++        {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-2 w-2 rounded-full bg-current" />}</Chip>)}
+       </div>
+       <div className="mt-4">
+         <TextField type="date" aria-label="날짜" value={date} onChange={setDate} />
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index d4e0825..4e6d361 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -44,7 +44,7 @@ export default function PlanSheet() {
+         <ul className="flex flex-col gap-2">
+           {subjects.map((s) => (
+             <li key={s.id}>
+-              <Pressable onClick={() => { setPicked(s.id); setListing(false); }} className="flex h-[48px] w-full items-center rounded-lg bg-canvas px-4">
++              <Pressable onClick={() => { setPicked(s.id); setListing(false); }} className="flex h-[48px] w-full items-center rounded-xl bg-canvas px-4">
+                 <SubjectDot color={s.color} className="mr-3" />
+                 <span className="text-[15px] font-bold text-primary">{s.name}</span>
+               </Pressable>
+@@ -72,7 +72,7 @@ export default function PlanSheet() {
+       {overlap && <p className="mt-2 text-[13px] text-caution-strong">겹치는 계획이 있어요</p>}
+       <p className="mt-4 text-[12px] font-bold text-secondary">반복</p>
+       <div className="mt-2 flex gap-2">
+-        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
++        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <span aria-hidden="true" className="ml-1.5 h-2 w-2 rounded-full bg-current" />}</Chip>)}
+       </div>
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-[14px] font-medium text-primary">시작 10분 전 알림</span>
+diff --git a/src/screens/plan-sheet/Toggle.jsx b/src/screens/plan-sheet/Toggle.jsx
+index d90861d..975e27d 100644
+--- a/src/screens/plan-sheet/Toggle.jsx
++++ b/src/screens/plan-sheet/Toggle.jsx
+@@ -8,7 +8,7 @@ export default function Toggle({ checked, onChange, 'aria-label': ariaLabel }) {
+       aria-checked={!!checked}
+       aria-label={ariaLabel}
+       onClick={() => onChange?.(!checked)}
+-      className="inline-flex h-11 items-center bg-transparent p-0"
++      className="inline-flex h-11 items-center rounded-xl active:scale-[0.98] bg-transparent p-0"
+     >
+       <span className={cx('relative block h-7 w-12 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line')}>
+         <span
+diff --git a/src/screens/subject-manager/ArchiveButton.jsx b/src/screens/subject-manager/ArchiveButton.jsx
+index 0ed3d56..e05330e 100644
+--- a/src/screens/subject-manager/ArchiveButton.jsx
++++ b/src/screens/subject-manager/ArchiveButton.jsx
+@@ -3,7 +3,7 @@ export default function ArchiveButton({ onClick, ...rest }) {
+     <button
+       type="button"
+       onClick={onClick}
+-      className="ml-2 inline-flex h-7 items-center justify-center rounded-md border border-danger bg-surface px-2 text-[12px] font-bold text-danger active:opacity-80 disabled:opacity-40"
++      className="ml-2 inline-flex h-7 items-center justify-center rounded-xl active:scale-[0.98] border border-danger bg-surface px-2 text-[12px] font-bold text-danger active:opacity-80 disabled:opacity-40"
+       {...rest}
+     >
+       보관
+diff --git a/src/screens/subject-manager/SubjectManager.tsx b/src/screens/subject-manager/SubjectManager.tsx
+index 56bdddd..54a31c4 100644
+--- a/src/screens/subject-manager/SubjectManager.tsx
++++ b/src/screens/subject-manager/SubjectManager.tsx
+@@ -51,7 +51,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><TextField aria-label="과목 이름" value={name} onChange={setName} /></div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">표준 과목 (과목별 랭킹 기준)</p>
+         <div className="mt-2 flex flex-wrap gap-2">
+-          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
++          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-2 w-2 rounded-full bg-current" />}</Chip>)}
+         </div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">색</p>
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+diff --git a/src/screens/subject-sheet/SubjectSheet.tsx b/src/screens/subject-sheet/SubjectSheet.tsx
+index 0201407..65e299f 100644
+--- a/src/screens/subject-sheet/SubjectSheet.tsx
++++ b/src/screens/subject-sheet/SubjectSheet.tsx
+@@ -116,7 +116,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
+             <div className="mt-2 flex flex-wrap gap-2">
+-              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
++              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-2 w-2 rounded-full bg-current" />}</Chip>)}
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+@@ -140,7 +140,7 @@ export default function SubjectSheet() {
+                     <Pressable
+                       aria-pressed={s.id === picked}
+                       onClick={() => setPicked(s.id)}
+-                      className={`flex h-[63px] w-full items-center rounded-lg border-2 px-4 ${
++                      className={`flex h-[63px] w-full items-center rounded-xl border-2 px-4 ${
+                         s.id === picked ? 'border-brand bg-brand-soft' : 'border-transparent bg-canvas'
+                       }`}
+                     >
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index 43e05c1..03add9e 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -15,7 +15,7 @@ export default function Button({ variant = 'primary', size = 'L', disabled, onCl
+       disabled={disabled}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
++        'inline-flex items-center justify-center rounded-xl active:scale-[0.98] font-bold active:opacity-80 disabled:opacity-40',
+         variants[variant],
+         sizes[size],
+         className,
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 0aa5ad5..91e526d 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -7,7 +7,7 @@ export default function Chip({ selected, onClick, className, children }) {
+       aria-pressed={!!selected}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex h-8 items-center rounded-full px-3 text-[13px] font-bold',
++        'inline-flex h-8 items-center rounded-xl active:scale-[0.98] px-3 text-[13px] font-bold',
+         selected ? 'bg-primary text-inverse' : 'border border-line bg-surface text-secondary',
+         className,
+       )}
+diff --git a/src/ui/ColorPicker.jsx b/src/ui/ColorPicker.jsx
+index 370ade6..4631963 100644
+--- a/src/ui/ColorPicker.jsx
++++ b/src/ui/ColorPicker.jsx
+@@ -12,7 +12,7 @@ export default function ColorPicker({ value, onChange }) {
+           aria-pressed={value === key}
+           onClick={() => onChange?.(key)}
+           className={cx(
+-            'size-8 rounded-full border-2',
++            'size-8 rounded-xl active:scale-[0.98] border-2',
+             SUBJECT_COLORS[key],
+             value === key ? 'border-primary' : 'border-transparent',
+           )}
+diff --git a/src/ui/Pressable.jsx b/src/ui/Pressable.jsx
+index c14330b..8aee92e 100644
+--- a/src/ui/Pressable.jsx
++++ b/src/ui/Pressable.jsx
+@@ -6,7 +6,7 @@ export default function Pressable({ onClick, disabled, className, children, ...r
+       type="button"
+       onClick={onClick}
+       disabled={disabled}
+-      className={cx('m-0 border-0 bg-transparent p-0 text-left text-inherit', className)}
++      className={cx('m-0 rounded-xl active:scale-[0.98] border-0 bg-transparent p-0 text-left text-inherit', className)}
+       {...rest}
+     >
+       {children}
+diff --git a/src/ui/Spinner.jsx b/src/ui/Spinner.jsx
+index 520e003..77a003a 100644
+--- a/src/ui/Spinner.jsx
++++ b/src/ui/Spinner.jsx
+@@ -2,7 +2,7 @@ export default function Spinner() {
+   return (
+     <span
+       aria-hidden="true"
+-      className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
++      className="mr-2 inline-block h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent"
+     />
+   );
+ }

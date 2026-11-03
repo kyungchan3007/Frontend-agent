@@ -1,0 +1,20 @@
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index 0921a41..d4e0825 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -79,9 +79,12 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <Button className="mt-4 w-full" disabled={end <= start || saving} onClick={save}>
+-        {saving && <Spinner />}저장하기
+-      </Button>
++      <div className="mt-4 flex gap-2">
++        <Button variant="ghost" className="flex-1" onClick={() => navigate('/')}>취소</Button>
++        <Button className="flex-1" disabled={end <= start || saving} onClick={save}>
++          {saving && <Spinner />}저장하기
++        </Button>
++      </div>
+     </BottomSheet>
+   );
+ }

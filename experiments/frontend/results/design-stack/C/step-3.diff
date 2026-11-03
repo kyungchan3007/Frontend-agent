@@ -1,0 +1,82 @@
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index 1c71802..bdbbecf 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -3,8 +3,7 @@ import { navigate } from '../../App';
+ import { createPlan, getPlans } from '../../api/plans';
+ import { useSubjects } from '../../shared';
+ import type { Plan } from '../../types';
+-import { BottomSheet, Button, Chip, Pressable, SubjectDot, TextField } from '../../ui/index.js';
+-import Spinner from './Spinner.jsx';
++import { BottomSheet, Button, Chip, Pressable, Spinner, SubjectDot, TextField } from '../../ui/index.js';
+ import Toggle from './Toggle.jsx';
+ 
+ const REPEAT = [['none', '안 함'], ['daily', '매일'], ['weekdays', '평일'], ['custom', '요일 선택']];
+diff --git a/src/screens/subject-sheet/SubjectSheet.tsx b/src/screens/subject-sheet/SubjectSheet.tsx
+index bf7d4b3..5c4c8d1 100644
+--- a/src/screens/subject-sheet/SubjectSheet.tsx
++++ b/src/screens/subject-sheet/SubjectSheet.tsx
+@@ -4,7 +4,7 @@ import { createSubject, getSubjects } from '../../api/subjects';
+ import { getCurrentSession, startSession as postSession } from '../../api/sessions';
+ import { NAME_MAX, STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, activeSubjects, isNameTooLong } from '../../shared';
+ import type { Subject } from '../../types';
+-import { BottomSheet, Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
++import { BottomSheet, Button, Chip, ColorPicker, Pressable, Spinner, SubjectDot, TextField } from '../../ui/index.js';
+ import OfflineBanner from './OfflineBanner.jsx';
+ import Toast from './Toast.jsx';
+ 
+@@ -29,6 +29,7 @@ export default function SubjectSheet() {
+   const [standard, setStandard] = useState('수학');
+   const [color, setColor] = useState('blue');
+   const [error, setError] = useState<string | null>(null);
++  const [adding, setAdding] = useState(false);
+   const [toast, setToast] = useState(false);
+   const [online, setOnline] = useState(() => navigator.onLine);
+ 
+@@ -80,7 +81,14 @@ export default function SubjectSheet() {
+     if (!subjects) return;
+     if (subjects.some((s) => s.name === name)) return setError(MESSAGES.same);
+     if (subjects.length >= SUBJECT_MAX) return setError(MESSAGES.limit);
+-    const { status, data } = await createSubject({ name, standardSubject: standard, color });
++    setAdding(true);
++    let res;
++    try {
++      res = await createSubject({ name, standardSubject: standard, color });
++    } finally {
++      setAdding(false);
++    }
++    const { status, data } = res;
+     if (status === 409) return setError(data.code === 'SUBJECT_LIMIT' ? MESSAGES.limit : MESSAGES.same);
+     setSubjects([data, ...subjects]);
+     setPicked(data.id);
+@@ -112,7 +120,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+-            <Button className="mt-5 w-full" disabled={!name || Boolean(message)} onClick={submit}>추가하기</Button>
++            <Button className="mt-5 w-full" disabled={!name || Boolean(message) || adding} onClick={submit}>{adding && <Spinner />}추가하기</Button>
+           </div>
+         ) : (
+           <div>
+diff --git a/src/screens/plan-sheet/Spinner.jsx b/src/ui/Spinner.jsx
+similarity index 100%
+rename from src/screens/plan-sheet/Spinner.jsx
+rename to src/ui/Spinner.jsx
+diff --git a/src/ui/index.d.ts b/src/ui/index.d.ts
+index 76a6aa0..d07fb52 100644
+--- a/src/ui/index.d.ts
++++ b/src/ui/index.d.ts
+@@ -10,3 +10,4 @@ export const TextField: UI
+ export const SubjectDot: UI
+ export const ColorPicker: UI
+ export const BottomSheet: UI
++export const Spinner: UI
+diff --git a/src/ui/index.js b/src/ui/index.js
+index 3b0f05b..f3753b7 100644
+--- a/src/ui/index.js
++++ b/src/ui/index.js
+@@ -5,3 +5,4 @@ export { default as TextField } from './TextField.jsx';
+ export { default as SubjectDot } from './SubjectDot.jsx';
+ export { default as ColorPicker } from './ColorPicker.jsx';
+ export { default as BottomSheet } from './BottomSheet.jsx';
++export { default as Spinner } from './Spinner.jsx';

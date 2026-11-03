@@ -1,0 +1,168 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index d9a5c11..803fac9 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
+ import SubjectSheet from './screens/subject-sheet/SubjectSheet';
+ import SubjectManager from './screens/subject-manager/SubjectManager';
+ import PlanSheet from './screens/plan-sheet/PlanSheet';
++import ExamSheet from './screens/exam-sheet/ExamSheet';
+ 
+ export function navigate(path: string) {
+   window.history.pushState({}, '', path);
+@@ -27,6 +28,7 @@ export default function App() {
+   }, []);
+   if (path.startsWith('/timer/')) return <h1>측정 중 {path.split('/')[2]}</h1>;
+   if (path === '/subjects') return <Shell><SubjectManager /></Shell>;
++  if (path === '/exams') return <Shell title="시험"><ExamSheet /></Shell>;
+   if (path === '/plan') return <Shell title="플래너"><PlanSheet /></Shell>;
+   return <Shell title="홈"><SubjectSheet /></Shell>;
+ }
+diff --git a/src/api/exams.ts b/src/api/exams.ts
+new file mode 100644
+index 0000000..1089dc3
+--- /dev/null
++++ b/src/api/exams.ts
+@@ -0,0 +1,4 @@
++import { apiPost } from './subjects'
++
++export const createExam = (exam: { name: string; subjectId: string; date: string; notify: boolean }) =>
++  apiPost('/exams', exam)
+diff --git a/src/screens/exam-sheet/ExamSheet.tsx b/src/screens/exam-sheet/ExamSheet.tsx
+new file mode 100644
+index 0000000..489fd02
+--- /dev/null
++++ b/src/screens/exam-sheet/ExamSheet.tsx
+@@ -0,0 +1,71 @@
++import { useState } from 'react';
++import { navigate } from '../../App';
++import { createExam } from '../../api/exams';
++import { NAME_MAX, isNameTooLong, useSubjects } from '../../shared';
++import { BottomSheet, Button, Pressable, SubjectDot, TextField, Toggle } from '../../ui/index.js';
++
++export default function ExamSheet() {
++  const { subjects, loading } = useSubjects();
++  const [name, setName] = useState('');
++  const [picked, setPicked] = useState<string | null>(null);
++  const [listing, setListing] = useState(false);
++  const [date, setDate] = useState('');
++  const [notify, setNotify] = useState(true);
++
++  if (loading) return null;
++  const pickedId = picked ?? subjects[0]?.id ?? null;
++  const current = subjects.find((s) => s.id === pickedId);
++  const tooLong = isNameTooLong(name);
++  const can = name.trim() !== '' && !tooLong && date !== '';
++
++  const save = async () => {
++    const { status } = await createExam({ name: name.trim(), subjectId: pickedId!, date, notify });
++    if (status === 201) navigate('/');
++  };
++
++  if (listing) {
++    return (
++      <BottomSheet title="과목 선택">
++        <ul className="flex flex-col gap-2">
++          {subjects.map((s) => (
++            <li key={s.id}>
++              <Pressable onClick={() => { setPicked(s.id); setListing(false); }} className="flex h-[48px] w-full items-center rounded-lg bg-canvas px-4">
++                <SubjectDot color={s.color} className="mr-3" />
++                <span className="text-[15px] font-bold text-primary">{s.name}</span>
++              </Pressable>
++            </li>
++          ))}
++        </ul>
++      </BottomSheet>
++    );
++  }
++
++  return (
++    <BottomSheet title="시험 일정 추가">
++      <TextField
++        aria-label="시험 이름"
++        placeholder="시험 이름"
++        value={name}
++        onChange={setName}
++        id="exam-name"
++        error={tooLong ? `이름은 ${NAME_MAX}자까지 쓸 수 있어요. 조금 줄여 주세요` : undefined}
++        trailing={tooLong && <span className="text-[12px] text-secondary">{[...name.trim()].length}/{NAME_MAX}</span>}
++      />
++      <Pressable onClick={() => setListing(true)} className="mt-2 flex h-[44px] w-full items-center justify-between">
++        <span className="text-[14px] font-medium text-primary">과목</span>
++        <span className="flex items-center text-[14px] text-secondary">
++          {current && <SubjectDot color={current.color} className="mr-2" />}
++          {current?.name} ›
++        </span>
++      </Pressable>
++      <div className="mt-2">
++        <TextField type="date" aria-label="날짜" value={date} onChange={setDate} />
++      </div>
++      <div className="mt-4 flex items-center justify-between">
++        <span className="text-[14px] font-medium text-primary">시험 하루 전 알림</span>
++        <Toggle aria-label="시험 하루 전 알림" checked={notify} onChange={setNotify} />
++      </div>
++      <Button className="mt-4 w-full" disabled={!can} onClick={save}>저장하기</Button>
++    </BottomSheet>
++  );
++}
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index 2be5567..3f22c0e 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -3,8 +3,7 @@ import { navigate } from '../../App';
+ import { createPlan, getPlans } from '../../api/plans';
+ import { useSubjects } from '../../shared';
+ import type { Plan } from '../../types';
+-import { BottomSheet, Button, Chip, Pressable, SubjectDot, TextField } from '../../ui/index.js';
+-import Toggle from './Toggle.jsx';
++import { BottomSheet, Button, Chip, Pressable, SubjectDot, TextField, Toggle } from '../../ui/index.js';
+ 
+ const REPEAT = [['none', '안 함'], ['daily', '매일'], ['weekdays', '평일'], ['custom', '요일 선택']];
+ 
+diff --git a/src/ui/Toggle.jsx b/src/ui/Toggle.jsx
+new file mode 100644
+index 0000000..f169a85
+--- /dev/null
++++ b/src/ui/Toggle.jsx
+@@ -0,0 +1,23 @@
++import { cx } from './cx.js';
++
++export default function Toggle({ checked, onChange, 'aria-label': ariaLabel }) {
++  return (
++    <button
++      type="button"
++      role="switch"
++      aria-checked={!!checked}
++      aria-label={ariaLabel}
++      onClick={() => onChange?.(!checked)}
++      className="inline-flex h-11 items-center bg-transparent p-0"
++    >
++      <span className={cx('relative block h-7 w-12 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line')}>
++        <span
++          className={cx(
++            'absolute top-0.5 left-0.5 size-6 rounded-full bg-surface transition-transform',
++            checked && 'translate-x-5',
++          )}
++        />
++      </span>
++    </button>
++  );
++}
+diff --git a/src/ui/index.d.ts b/src/ui/index.d.ts
+index 76a6aa0..36b8059 100644
+--- a/src/ui/index.d.ts
++++ b/src/ui/index.d.ts
+@@ -10,3 +10,4 @@ export const TextField: UI
+ export const SubjectDot: UI
+ export const ColorPicker: UI
+ export const BottomSheet: UI
++export const Toggle: UI
+diff --git a/src/ui/index.js b/src/ui/index.js
+index 3b0f05b..8f3544f 100644
+--- a/src/ui/index.js
++++ b/src/ui/index.js
+@@ -5,3 +5,4 @@ export { default as TextField } from './TextField.jsx';
+ export { default as SubjectDot } from './SubjectDot.jsx';
+ export { default as ColorPicker } from './ColorPicker.jsx';
+ export { default as BottomSheet } from './BottomSheet.jsx';
++export { default as Toggle } from './Toggle.jsx';

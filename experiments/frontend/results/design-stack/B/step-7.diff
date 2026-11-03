@@ -1,0 +1,16 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index fea1665..4cc7b76 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -88,7 +88,10 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-4 w-full`} disabled={end <= start || saving} onClick={save}>{saving && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}저장하기</Button>
++      <div className="mt-4 flex gap-2">
++        <Button className={`${buttonStyles.ghost} ${buttonSizes.L} flex-1`} onClick={() => navigate('/')}>취소</Button>
++        <Button className={`${buttonStyles.primary} ${buttonSizes.L} flex-1`} disabled={end <= start || saving} onClick={save}>{saving && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}저장하기</Button>
++      </div>
+     </BottomSheet>
+   );
+ }

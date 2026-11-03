@@ -1,0 +1,356 @@
+{
+  "start": {
+    "A": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "B": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "C": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    }
+  },
+  "scene-1": {
+    "A": {
+      "isError": false,
+      "gateRuns": 2,
+      "turns": 16,
+      "files": [
+        "M\tsrc/PlanSheet.tsx",
+        "M\tsrc/SubjectManager.tsx",
+        "M\tsrc/SubjectSheet.tsx",
+        "M\tsrc/ui/Button.jsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 43,
+        "total": 44,
+        "failed": [
+          "S4 표준 과목과 오늘 시간을 보여 준다"
+        ]
+      }
+    },
+    "B": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 14,
+      "files": [
+        "M\tsrc/PlanSheet.tsx",
+        "M\tsrc/SubjectManager.tsx",
+        "M\tsrc/SubjectSheet.tsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 43,
+        "total": 44,
+        "failed": [
+          "S4 표준 과목과 오늘 시간을 보여 준다"
+        ]
+      }
+    },
+    "C": {
+      "isError": false,
+      "gateRuns": 2,
+      "turns": 19,
+      "files": [
+        "M\tsrc/screens/plan-sheet/PlanSheet.tsx",
+        "A\tsrc/screens/plan-sheet/SaveButton.jsx",
+        "A\tsrc/screens/subject-manager/AddButton.jsx",
+        "M\tsrc/screens/subject-manager/SubjectManager.tsx",
+        "A\tsrc/screens/subject-sheet/StartButton.jsx",
+        "M\tsrc/screens/subject-sheet/SubjectSheet.tsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 43,
+        "total": 44,
+        "failed": [
+          "S4 표준 과목과 오늘 시간을 보여 준다"
+        ]
+      }
+    }
+  },
+  "scene-2": {
+    "A": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 12,
+      "files": [
+        "M\tsrc/ui/BottomSheet.jsx",
+        "M\tsrc/ui/Button.jsx",
+        "M\tsrc/ui/Pressable.jsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    },
+    "B": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 7,
+      "files": [
+        "M\tsrc/ui/BottomSheet.jsx",
+        "M\tsrc/ui/Button.jsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    },
+    "C": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 8,
+      "files": [
+        "M\tsrc/ui/BottomSheet.jsx",
+        "M\tsrc/ui/Button.jsx"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    }
+  },
+  "scene-3": {
+    "A": {
+      "x": {
+        "isError": false,
+        "gateRuns": 2,
+        "turns": 18,
+        "files": [
+          "M\tsrc/SubjectManager.tsx",
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 12,
+        "files": [
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "mergeOk": false,
+      "conflicts": [
+        "src/ui/Button.jsx",
+        "src/ui/Chip.jsx"
+      ],
+      "behavior": null
+    },
+    "B": {
+      "x": {
+        "isError": false,
+        "gateRuns": 2,
+        "turns": 14,
+        "files": [
+          "M\tsrc/SubjectManager.tsx",
+          "M\tsrc/SubjectSheet.tsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 7,
+        "files": [
+          "M\tsrc/PlanSheet.tsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 36,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구"
+        ]
+      }
+    },
+    "C": {
+      "x": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 14,
+        "files": [
+          "A\tsrc/screens/subject-sheet/Spinner.jsx",
+          "M\tsrc/screens/subject-sheet/SubjectSheet.tsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 9,
+        "files": [
+          "M\tsrc/screens/plan-sheet/PlanSheet.tsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 36,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구"
+        ]
+      }
+    }
+  },
+  "scene-4": {
+    "A": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 11,
+      "files": [
+        "M\tsrc/App.tsx",
+        "A\tsrc/ExamSheet.tsx",
+        "A\tsrc/api/exams.ts",
+        "M\tsrc/types.ts"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    },
+    "B": {
+      "isError": false,
+      "gateRuns": 2,
+      "turns": 11,
+      "files": [
+        "M\tsrc/App.tsx",
+        "A\tsrc/ExamSheet.tsx",
+        "A\tsrc/api/exams.ts"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    },
+    "C": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 16,
+      "files": [
+        "M\tsrc/App.tsx",
+        "A\tsrc/api/exams.ts",
+        "A\tsrc/screens/exam-sheet/ExamSheet.tsx",
+        "M\tsrc/screens/plan-sheet/PlanSheet.tsx",
+        "A\tsrc/ui/Toggle.jsx",
+        "M\tsrc/ui/index.d.ts",
+        "M\tsrc/ui/index.js"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 44,
+        "total": 44,
+        "failed": []
+      }
+    }
+  },
+  "scene-5": {
+    "A": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 18,
+      "denials": 1,
+      "files": [
+        "M\tsrc/App.tsx",
+        "D\tsrc/PlanSheet.tsx",
+        "D\tsrc/api/plans.ts",
+        "M\tsrc/tokens.css",
+        "M\tsrc/types.ts",
+        "M\tsrc/ui/Pressable.jsx",
+        "D\tsrc/ui/Toggle.jsx",
+        "M\tsrc/ui/index.d.ts",
+        "M\tsrc/ui/index.js"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 35,
+        "total": 35,
+        "failed": []
+      }
+    },
+    "B": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 23,
+      "denials": 2,
+      "files": [
+        "M\tsrc/App.tsx",
+        "D\tsrc/PlanSheet.tsx",
+        "D\tsrc/api/plans.ts",
+        "M\tsrc/tokens.css",
+        "M\tsrc/types.ts",
+        "D\tsrc/ui/Toggle.jsx",
+        "M\tsrc/ui/index.d.ts",
+        "M\tsrc/ui/index.js",
+        "M\ttools/mock.mjs"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 35,
+        "total": 35,
+        "failed": []
+      }
+    },
+    "C": {
+      "isError": false,
+      "gateRuns": 1,
+      "turns": 16,
+      "denials": 1,
+      "files": [
+        "M\tsrc/App.tsx",
+        "D\tsrc/api/plans.ts",
+        "D\tsrc/screens/plan-sheet/PlanSheet.tsx",
+        "D\tsrc/screens/plan-sheet/Toggle.jsx",
+        "M\tsrc/tokens.css",
+        "M\tsrc/types.ts"
+      ],
+      "behavior": {
+        "built": true,
+        "pass": 35,
+        "total": 35,
+        "failed": []
+      }
+    }
+  }
+}

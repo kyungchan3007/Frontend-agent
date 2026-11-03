@@ -1,0 +1,71 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index cd66410..a96976e 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -16,6 +16,7 @@ export default function PlanSheet() {
+   const [end, setEnd] = useState('21:00');
+   const [repeat, setRepeat] = useState('weekdays');
+   const [notify, setNotify] = useState(true);
++  const [saving, setSaving] = useState(false);
+ 
+   useEffect(() => {
+     getPlans().then(({ data }) => setPlans(data.plans));
+@@ -27,8 +28,13 @@ export default function PlanSheet() {
+   const overlap = plans.some((p) => start < p.end && p.start < end);
+ 
+   const save = async () => {
+-    const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
+-    if (status === 201) navigate('/');
++    setSaving(true);
++    try {
++      const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
+   };
+ 
+   if (listing) {
+@@ -82,7 +88,10 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-4 w-full`} disabled={end <= start} onClick={save}>저장하기</Button>
++      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-4 w-full`} disabled={end <= start || saving} onClick={save}>
++        {saving && <span aria-hidden="true" className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
++        저장하기
++      </Button>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index cd8b6d0..9a2083a 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -49,7 +49,10 @@ export default function SubjectManager() {
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+       </section>
+       {archived > 0 && <p className="mt-3 text-[13px] text-secondary">보관한 과목 {archived}개 ›</p>}
+-      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-auto w-full`} disabled={!can} onClick={submit}>과목 추가하기</Button>
++      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-auto w-full`} disabled={!can} onClick={submit}>
++        <span aria-hidden="true" className="mr-2">＋</span>
++        과목 추가하기
++      </Button>
+     </div>
+   );
+ }
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index 1561a0b..996c049 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -154,8 +154,9 @@ export default function SubjectSheet() {
+             )}
+             <Button className={`${buttonStyles.ghost} ${buttonSizes.M} mt-3 w-full`} onClick={() => setForm(true)}>＋ 새 과목 추가</Button>
+             {subjects.length > 0 && (
+-              <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-3 w-full`} onClick={start}>
++              <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-3 w-full flex-col`} onClick={start}>
+                 {session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}
++                {current && <span aria-hidden="true" className="text-[11px] font-medium opacity-80">오늘 {formatToday(current.todaySeconds)}</span>}
+               </Button>
+             )}
+           </div>

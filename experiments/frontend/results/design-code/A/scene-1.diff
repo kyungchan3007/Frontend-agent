@@ -1,0 +1,97 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index dc10444..5c21e90 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -16,6 +16,7 @@ export default function PlanSheet() {
+   const [end, setEnd] = useState('21:00');
+   const [repeat, setRepeat] = useState('weekdays');
+   const [notify, setNotify] = useState(true);
++  const [saving, setSaving] = useState(false);
+ 
+   useEffect(() => {
+     getPlans().then(({ data }) => setPlans(data.plans));
+@@ -27,8 +28,13 @@ export default function PlanSheet() {
+   const overlap = plans.some((p) => start < p.end && p.start < end);
+ 
+   const save = async () => {
+-    const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
+-    if (status === 201) navigate('/');
++    setSaving(true);
++    try {
++      const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
+   };
+ 
+   if (listing) {
+@@ -72,7 +78,7 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}>저장하기</Button></div>
++      <div className="mt-4"><Button fullWidth loading={saving} disabled={end <= start} onClick={save}>저장하기</Button></div>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index 1fac375..9261279 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -49,7 +49,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+       </section>
+       {archived > 0 && <p className="mt-3 text-[13px] text-secondary">보관한 과목 {archived}개 ›</p>}
+-      <div className="mt-auto"><Button fullWidth disabled={!can} onClick={submit}>과목 추가하기</Button></div>
++      <div className="mt-auto"><Button fullWidth icon="＋" disabled={!can} onClick={submit}>과목 추가하기</Button></div>
+     </div>
+   );
+ }
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index 718d23e..4d879f1 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -142,7 +142,7 @@ export default function SubjectSheet() {
+             <div className="mt-3"><Button variant="ghost" size="M" fullWidth onClick={() => setForm(true)}>＋ 새 과목 추가</Button></div>
+             {subjects.length > 0 && (
+               <div className="mt-3">
+-                <Button fullWidth onClick={start}>
++                <Button fullWidth caption={current ? `오늘 ${formatToday(current.todaySeconds)}` : undefined} onClick={start}>
+                   {session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}
+                 </Button>
+               </div>
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index f47a6fd..430d2fe 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -8,11 +8,11 @@ const variants = {
+ };
+ const sizes = { L: 'h-13 px-6 text-[17px]', M: 'h-10 px-5 text-[15px]', S: 'h-8 px-3 text-[13px]' };
+ 
+-export default function Button({ variant = 'primary', size = 'L', fullWidth, disabled, onClick, children, ...rest }) {
++export default function Button({ variant = 'primary', size = 'L', fullWidth, disabled, loading, icon, caption, onClick, children, ...rest }) {
+   return (
+     <button
+       type="button"
+-      disabled={disabled}
++      disabled={disabled || loading}
+       onClick={onClick}
+       className={cx(
+         'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
+@@ -22,7 +22,14 @@ export default function Button({ variant = 'primary', size = 'L', fullWidth, dis
+       )}
+       {...rest}
+     >
+-      {children}
++      {loading && <span aria-hidden="true" className="mr-2 inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />}
++      {icon && <span aria-hidden="true" className="mr-1">{icon}</span>}
++      {caption ? (
++        <span className="flex flex-col items-center">
++          <span>{children}</span>
++          <span aria-hidden="true" className="text-[11px] font-medium">{caption}</span>
++        </span>
++      ) : children}
+     </button>
+   );
+ }

@@ -1,0 +1,15 @@
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index 240886a..79bcd2e 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -163,8 +163,9 @@ export default function SubjectSheet() {
+             )}
+             <Button className={`${buttonStyles.ghost} ${buttonSizes.M} mt-3 w-full`} onClick={() => setForm(true)}>＋ 새 과목 추가</Button>
+             {subjects.length > 0 && (
+-              <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-3 w-full`} onClick={start}>
++              <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-3 w-full ${session ? '' : 'flex-col'}`} onClick={start}>
+                 {session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}
++                {!session && <span aria-hidden="true" className="text-[11px] font-medium">목표 2:00</span>}
+               </Button>
+             )}
+           </div>
