@@ -22,6 +22,8 @@ export async function mockApi(page, { subjects = FOUR, session = null, plans = [
   await page.route('**/api/**', async (route) => {
     const req = route.request();
     const url = new URL(req.url()).pathname;
+    // 개발 서버의 src/api 파일은 API 요청이 아니다
+    if (url.startsWith('/src/')) return route.continue();
     if (req.method() === 'GET' && url === `${PREFIX}/subjects`) return json(route, 200, { subjects });
     if (req.method() === 'GET' && url === `${PREFIX}/sessions/current`) return json(route, 200, { session });
     if (req.method() === 'GET' && url === `${PREFIX}/plans`) return json(route, 200, { plans });
