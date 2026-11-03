@@ -200,8 +200,6 @@
 - 앱 전체를 바꿀 때는 화면 곳곳에 넣은 내용을 함께 고쳐야 했습니다
 - 동시에 고쳤을 때 충돌은 없었지만, 한 칩에 ✓와 •가 함께 들어갔는데도 아무것도 알려 주지 않았습니다. 충돌은 비용이면서 알림이기도 한 것 같습니다
 
-> 이 부분은 에이전트가 정리한 초안이고, 아직 제가 코드를 읽고 판단하지 않았습니다. 설계마다 1번씩 비교했습니다.
-
 ### 코드 역할 분담: 어디까지 나눌까
 
 평소처럼 로직 · 훅 · API · 타입을 전부 나눈 구조와, 필요할 때만 나눈 구조, 한 파일에 둔 구조를 같은 앱으로 비교했습니다.
@@ -220,23 +218,23 @@
 
 ### 이미지는 어떻게 가져갈까
 
-수치 없이 자료를 읽고, 제 프로젝트라면 어떻게 할지 정리했습니다. 직접 비교한 내용은 아닙니다.
+자료를 읽으며 공부한 내용을 제 프로젝트라면 어떻게 해 볼지 적어 봤습니다. 직접 비교한 내용은 아닙니다.
 
-- **첫 화면의 큰 이미지:** `loading="lazy"`를 쓰지 않고 `fetchpriority="high"`를 줍니다
-- **아래쪽 이미지:** `loading="lazy"`로 충분해 보입니다. `fetchpriority="high"`를 여러 장에 주는 것은 피합니다
-- **크기:** `width` · `height`로 자리를 잡고, `srcset` · `sizes`로 화면에 맞는 크기를 보냅니다
-- **형식:** AVIF · WebP를 먼저 생각합니다
+- **첫 화면의 큰 이미지:** `loading="lazy"`를 빼고 `fetchpriority="high"`를 주면 좋다고 배웠습니다. 다음에 해 보려고 합니다
+- **아래쪽 이미지:** `loading="lazy"`면 충분할 것 같습니다. `fetchpriority="high"`는 여러 장에 주지 않는 편이 좋다고 배웠습니다
+- **크기:** `width` · `height`로 자리를 잡아 두고, `srcset` · `sizes`로 화면에 맞는 크기를 보내 보려고 합니다
+- **형식:** AVIF · WebP를 먼저 고려해 보려고 합니다
 
-이미지가 많지 않으면 빌드 전에 변환해 두는 것으로 시작하고, 사용자가 올리는 이미지가 많아지면 이미지 서버를 고민해 보려고 합니다.
+이미지가 많지 않으면 빌드 전에 변환해 두는 것으로 시작해 볼까 합니다. 사용자가 올리는 이미지가 많아지면 그때 이미지 서버를 고민해 보려고 합니다.
 
 ### 라이브러리는 어떻게 관리할까
 
-이것도 자료를 읽고 정리한 생각입니다.
+이것도 자료를 읽으며 공부한 내용입니다.
 
-- **먼저 보기:** 줄이기 전에 `rollup-plugin-visualizer`로 무엇이 큰지 봅니다
-- **가져오는 방식:** 아이콘처럼 큰 라이브러리는 `index`에서 몰아 가져오지 않고 필요한 경로만 가져옵니다
-- **나눠 불러오기:** 차트처럼 무거운 화면과 라이브러리는 `import()`로 나중에 불러옵니다
-- **`manualChunks`:** 번들을 본 뒤 필요할 때만 씁니다
+- **먼저 보기:** 줄이기 전에 `rollup-plugin-visualizer`로 무엇이 큰지부터 봐야겠다고 생각했습니다
+- **가져오는 방식:** 아이콘처럼 큰 라이브러리는 `index`에서 몰아 가져오기보다 필요한 경로만 가져오는 편이 낫다고 배웠습니다
+- **나눠 불러오기:** 차트처럼 무거운 화면과 라이브러리는 `import()`로 나중에 불러와 보려고 합니다
+- **`manualChunks`:** 번들을 본 뒤 필요할 때만 써 보려고 합니다
 - **크기 예산:** `size-limit` 같은 CI 검사는 번들이 자꾸 늘어날 때 더해 보려고 합니다
 
 참고한 자료: [이미지 우선순위 (Chrome)](https://developer.chrome.com/docs/modern-web-guidance/guides/performance/optimize-image-priority) · [큰 이미지와 LCP](https://unlighthouse.dev/learn-lighthouse/lcp/large-images) · [LCP 이미지 최적화](https://dev.to/apogeewatcher/image-optimisation-strategies-for-better-lcp-scores-3402) · [Barrel 파일 정리](https://code-splitting-com.pages.dev/advanced-tree-shaking-dependency-optimization/refactoring-barrel-files-to-reduce-bundle-bloat/) · [Vite 번들 최적화](https://skills.sh/patternsdev/skills/vite-bundle-optimization)
