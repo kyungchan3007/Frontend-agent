@@ -1,0 +1,12 @@
+{
+  "costUsd": 0.1709627,
+  "durationMs": 54023,
+  "turns": 26,
+  "uiDocRead": false,
+  "gateRuns": 0,
+  "permissionDenials": 1,
+  "isError": false,
+  "model": "claude-sonnet-5-5",
+  "effort": "low",
+  "buildOk": true
+}
