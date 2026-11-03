@@ -450,5 +450,146 @@
       "total": 44,
       "failed": []
     }
+  },
+  "D": {
+    "steps": [
+      {
+        "step": 1,
+        "isError": false,
+        "turns": 12,
+        "gateRuns": 1,
+        "denials": 1,
+        "files": [
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/ui/Button.jsx"
+        ],
+        "touchedCommon": true
+      },
+      {
+        "step": 2,
+        "isError": false,
+        "turns": 7,
+        "gateRuns": 1,
+        "denials": 0,
+        "files": [
+          "M\tsrc/SubjectManager.tsx"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 3,
+        "isError": false,
+        "turns": 9,
+        "gateRuns": 1,
+        "denials": 1,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 4,
+        "isError": false,
+        "turns": 18,
+        "gateRuns": 1,
+        "denials": 0,
+        "files": [
+          "M\tsrc/SubjectManager.tsx",
+          "M\tsrc/api/subjects.ts",
+          "M\tsrc/ui/Button.jsx"
+        ],
+        "touchedCommon": true
+      },
+      {
+        "step": 5,
+        "isError": false,
+        "turns": 10,
+        "gateRuns": 2,
+        "denials": 1,
+        "files": [
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/SubjectManager.tsx",
+          "M\tsrc/SubjectSheet.tsx"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 6,
+        "isError": false,
+        "turns": 9,
+        "gateRuns": 1,
+        "denials": 0,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 7,
+        "isError": false,
+        "turns": 8,
+        "gateRuns": 1,
+        "denials": 0,
+        "files": [
+          "M\tsrc/PlanSheet.tsx"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 8,
+        "isError": false,
+        "turns": 11,
+        "gateRuns": 2,
+        "denials": 1,
+        "files": [
+          "M\tsrc/App.tsx",
+          "A\tsrc/ExamSheet.tsx",
+          "A\tsrc/api/exams.ts"
+        ],
+        "touchedCommon": false
+      },
+      {
+        "step": 9,
+        "isError": false,
+        "turns": 24,
+        "gateRuns": 1,
+        "denials": 1,
+        "files": [
+          "M\tsrc/ExamSheet.tsx",
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/SubjectManager.tsx",
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx",
+          "M\tsrc/ui/ColorPicker.jsx",
+          "M\tsrc/ui/Pressable.jsx"
+        ],
+        "touchedCommon": true
+      }
+    ],
+    "tscOk": true,
+    "tscErr": "",
+    "end": {
+      "files": 25,
+      "uiFiles": 13,
+      "spinnerFiles": [
+        "ui/Button.jsx"
+      ],
+      "dotFiles": [
+        "ui/Chip.jsx"
+      ],
+      "roundedLgFiles": [
+        "SubjectManager.tsx",
+        "ui/Toast.jsx"
+      ],
+      "screenLocalComponents": [],
+      "usedOnce": []
+    },
+    "behavior": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    }
   }
 }
