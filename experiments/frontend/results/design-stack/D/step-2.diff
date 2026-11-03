@@ -1,0 +1,13 @@
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index f196bf1..c50bdb7 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -49,7 +49,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+       </section>
+       {archived > 0 && <p className="mt-3 text-[13px] text-secondary">보관한 과목 {archived}개 ›</p>}
+-      <div className="mt-auto"><Button fullWidth disabled={!can} onClick={submit}>과목 추가하기</Button></div>
++      <div className="mt-auto"><Button fullWidth disabled={!can} onClick={submit}><span aria-hidden="true">＋ </span>과목 추가하기</Button></div>
+     </div>
+   );
+ }

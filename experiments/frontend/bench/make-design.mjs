@@ -46,5 +46,5 @@ async function make(shape) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  console.log(JSON.stringify(await Promise.all(['A', 'B', 'C'].map(make)), null, 2));
+  console.log(JSON.stringify(await Promise.all((process.env.ONLY ?? 'A,B,C').split(',').map(make)), null, 2));
 }

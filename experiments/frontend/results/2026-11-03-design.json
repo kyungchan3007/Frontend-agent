@@ -17,6 +17,12 @@
       "pass": 44,
       "total": 44,
       "failed": []
+    },
+    "D": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
     }
   },
   "scene-1": {
@@ -226,6 +232,46 @@
           "D3 서버 409도 같은 문구",
           "M1 20개면 추가할 때 오류",
           "M2 서버 409도 같은 문구"
+        ]
+      }
+    },
+    "D": {
+      "x": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 14,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 10,
+        "files": [
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 35,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구",
+          "P6 반복 칩 4개가 순서대로"
         ]
       }
     }

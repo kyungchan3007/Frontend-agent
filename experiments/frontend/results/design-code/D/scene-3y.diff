@@ -1,0 +1,47 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index 89748fa..4df9a06 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -65,14 +65,14 @@ export default function PlanSheet() {
+       {overlap && <p className="mt-2 text-[13px] text-caution-strong">겹치는 계획이 있어요</p>}
+       <p className="mt-4 text-[12px] font-bold text-secondary">반복</p>
+       <div className="mt-2 flex gap-2">
+-        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}</Chip>)}
++        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <span aria-hidden="true">•</span>}</Chip>)}
+       </div>
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-[14px] font-medium text-primary">시작 10분 전 알림</span>
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}>저장하기</Button></div>
++      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}><span aria-hidden="true">✓</span>저장하기</Button></div>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index d9c6495..028e310 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -15,7 +15,7 @@ export default function Button({ variant = 'primary', size = 'L', disabled, onCl
+       disabled={disabled}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
++        'inline-flex items-center justify-center gap-1.5 rounded-md font-bold active:opacity-80 disabled:opacity-40',
+         variants[variant],
+         sizes[size],
+         fullWidth && 'w-full',
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 38fe11c..a3ef023 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -7,7 +7,7 @@ export default function Chip({ selected, onClick, children }) {
+       aria-pressed={!!selected}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex h-8 items-center rounded-full px-3 text-[13px] font-bold',
++        'inline-flex h-8 items-center gap-1 rounded-full px-3 text-[13px] font-bold',
+         selected ? 'bg-primary text-inverse' : 'border border-line bg-surface text-secondary',
+       )}
+     >
