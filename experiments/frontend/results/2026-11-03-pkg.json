@@ -1,0 +1,63 @@
+{
+  "results": [
+    {
+      "name": "앱 안",
+      "installMs": 2033,
+      "installOk": true,
+      "buildMs": 647,
+      "dev": {
+        "startMs": 327,
+        "before": 52,
+        "after": 48,
+        "reflectMs": 163,
+        "noReload": true
+      }
+    },
+    {
+      "name": "패키지",
+      "installMs": 1866,
+      "installOk": true,
+      "buildMs": 654,
+      "dev": {
+        "startMs": 320,
+        "before": 52,
+        "after": 48,
+        "reflectMs": 160,
+        "noReload": true
+      }
+    }
+  ],
+  "migration": {
+    "totalChangedFiles": 35,
+    "movedFiles": 13,
+    "screensChanged": 3,
+    "newPackageJson": 2,
+    "configChanged": [
+      "package.json",
+      "src/index.css"
+    ]
+  },
+  "pit": {
+    "withoutSource": {
+      "buildOk": true,
+      "hasButtonClassBefore": true,
+      "hasButtonClassAfter": true
+    },
+    "withoutInstall": {
+      "buildOk": false,
+      "error": ":35267:153)\n    at async CAC.<anonymous> (file:///private/var/folders/ht/prc2m2q939d1l29154xtvtmw0000gn/T/fe-measure-pkg-0bTwYu/node_modules/vite/dist/node/cli.js:790:3) {\n  errors: [Getter/Setter]\n}\n"
+    }
+  },
+  "setupRun": {
+    "durationMs": 30803,
+    "turns": 12,
+    "uiDocRead": false,
+    "gateRuns": 0,
+    "permissionDenials": 1,
+    "isError": false,
+    "changedFiles": 32,
+    "model": "claude-sonnet-5-5",
+    "effort": "low",
+    "buildOk": true
+  }
+}

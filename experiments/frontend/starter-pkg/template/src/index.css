@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import './tokens.css';
+@source '../packages/ui';
+@source '../packages/shared';
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
