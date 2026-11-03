@@ -1,0 +1,65 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index dc10444..5c21e90 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -16,6 +16,7 @@ export default function PlanSheet() {
+   const [end, setEnd] = useState('21:00');
+   const [repeat, setRepeat] = useState('weekdays');
+   const [notify, setNotify] = useState(true);
++  const [saving, setSaving] = useState(false);
+ 
+   useEffect(() => {
+     getPlans().then(({ data }) => setPlans(data.plans));
+@@ -27,8 +28,13 @@ export default function PlanSheet() {
+   const overlap = plans.some((p) => start < p.end && p.start < end);
+ 
+   const save = async () => {
+-    const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
+-    if (status === 201) navigate('/');
++    setSaving(true);
++    try {
++      const { status } = await createPlan({ subjectId: pickedId!, start, end, repeat, notify });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
+   };
+ 
+   if (listing) {
+@@ -72,7 +78,7 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}>저장하기</Button></div>
++      <div className="mt-4"><Button fullWidth loading={saving} disabled={end <= start} onClick={save}>저장하기</Button></div>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index f47a6fd..bd4733a 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -8,11 +8,11 @@ const variants = {
+ };
+ const sizes = { L: 'h-13 px-6 text-[17px]', M: 'h-10 px-5 text-[15px]', S: 'h-8 px-3 text-[13px]' };
+ 
+-export default function Button({ variant = 'primary', size = 'L', fullWidth, disabled, onClick, children, ...rest }) {
++export default function Button({ variant = 'primary', size = 'L', fullWidth, loading, disabled, onClick, children, ...rest }) {
+   return (
+     <button
+       type="button"
+-      disabled={disabled}
++      disabled={disabled || loading}
+       onClick={onClick}
+       className={cx(
+         'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
+@@ -22,6 +22,9 @@ export default function Button({ variant = 'primary', size = 'L', fullWidth, dis
+       )}
+       {...rest}
+     >
++      {loading && (
++        <span aria-hidden="true" className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
++      )}
+       {children}
+     </button>
+   );

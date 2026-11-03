@@ -1,0 +1,39 @@
+diff --git a/src/screens/plan-sheet/PlanSheet.tsx b/src/screens/plan-sheet/PlanSheet.tsx
+index bdbbecf..0921a41 100644
+--- a/src/screens/plan-sheet/PlanSheet.tsx
++++ b/src/screens/plan-sheet/PlanSheet.tsx
+@@ -72,7 +72,7 @@ export default function PlanSheet() {
+       {overlap && <p className="mt-2 text-[13px] text-caution-strong">겹치는 계획이 있어요</p>}
+       <p className="mt-4 text-[12px] font-bold text-secondary">반복</p>
+       <div className="mt-2 flex gap-2">
+-        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}</Chip>)}
++        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
+       </div>
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-[14px] font-medium text-primary">시작 10분 전 알림</span>
+diff --git a/src/screens/subject-manager/SubjectManager.tsx b/src/screens/subject-manager/SubjectManager.tsx
+index 866664b..56bdddd 100644
+--- a/src/screens/subject-manager/SubjectManager.tsx
++++ b/src/screens/subject-manager/SubjectManager.tsx
+@@ -51,7 +51,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><TextField aria-label="과목 이름" value={name} onChange={setName} /></div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">표준 과목 (과목별 랭킹 기준)</p>
+         <div className="mt-2 flex flex-wrap gap-2">
+-          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}</Chip>)}
++          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
+         </div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">색</p>
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+diff --git a/src/screens/subject-sheet/SubjectSheet.tsx b/src/screens/subject-sheet/SubjectSheet.tsx
+index 5c4c8d1..72f07fd 100644
+--- a/src/screens/subject-sheet/SubjectSheet.tsx
++++ b/src/screens/subject-sheet/SubjectSheet.tsx
+@@ -116,7 +116,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
+             <div className="mt-2 flex flex-wrap gap-2">
+-              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}</Chip>)}
++              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1.5 h-1 w-1 rounded-full bg-current" />}</Chip>)}
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>

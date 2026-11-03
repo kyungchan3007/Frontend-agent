@@ -1,0 +1,47 @@
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index d893bbc..672f1e2 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -1,6 +1,6 @@
+ import { useState } from 'react';
+ import { navigate } from './App';
+-import { createSubject } from './api/subjects';
++import { archiveSubject, createSubject } from './api/subjects';
+ import { STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, isNameTooLong, useSubjects } from './shared';
+ import { Button, Chip, ColorPicker, Pressable, SubjectDot, TextField, TextInput, buttonStyles, buttonSizes, chipStyles, fieldStyles, subjectColors } from './ui/index.js';
+ 
+@@ -22,6 +22,12 @@ export default function SubjectManager() {
+     setStandard(null);
+   };
+ 
++  const archive = async (id: string | number) => {
++    const { status } = await archiveSubject(id);
++    if (status !== 200) return;
++    setAll(all.map((x) => (x.id === id ? { ...x, archived: true } : x)));
++  };
++
+   return (
+     <div className="absolute inset-0 flex flex-col bg-canvas px-6 pt-[60px] pb-[34px]">
+       <div className="flex items-center justify-between">
+@@ -35,6 +41,7 @@ export default function SubjectManager() {
+             <SubjectDot className={`mr-3 ${subjectColors[s.color]}`} />
+             <span className="flex-1 text-[15px] font-medium text-primary">{s.name}</span>
+             <span className="rounded-full bg-canvas px-2 py-1 text-[12px] font-bold text-secondary">{s.standardSubject}</span>
++            <Button className="ml-2 h-8 border border-danger-strong bg-surface px-3 text-[13px] text-danger-strong" onClick={() => archive(s.id)}>보관</Button>
+           </li>
+         ))}
+       </ul>
+diff --git a/src/api/subjects.ts b/src/api/subjects.ts
+index 5d4b562..0d7a405 100644
+--- a/src/api/subjects.ts
++++ b/src/api/subjects.ts
+@@ -24,5 +24,8 @@ export const apiPost = (path: string, body: unknown) =>
+ 
+ export const getSubjects = () => apiGet('/subjects')
+ 
+-export const createSubject = (body: { name: string; standardSubject: string; color: string }) =>
++export const archiveSubject = (id: string | number) =>
++  request(`/subjects/${id}/archive`, { method: 'POST' })
++
++export const createSubject =(body: { name: string; standardSubject: string; color: string }) =>
+   apiPost('/subjects', body)

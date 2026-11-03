@@ -1,0 +1,34 @@
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index 1fac375..5547800 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -49,7 +49,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+       </section>
+       {archived > 0 && <p className="mt-3 text-[13px] text-secondary">보관한 과목 {archived}개 ›</p>}
+-      <div className="mt-auto"><Button fullWidth disabled={!can} onClick={submit}>과목 추가하기</Button></div>
++      <div className="mt-auto"><Button fullWidth plusIcon disabled={!can} onClick={submit}>과목 추가하기</Button></div>
+     </div>
+   );
+ }
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index bd4733a..5f6c3a4 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -8,7 +8,7 @@ const variants = {
+ };
+ const sizes = { L: 'h-13 px-6 text-[17px]', M: 'h-10 px-5 text-[15px]', S: 'h-8 px-3 text-[13px]' };
+ 
+-export default function Button({ variant = 'primary', size = 'L', fullWidth, loading, disabled, onClick, children, ...rest }) {
++export default function Button({ variant = 'primary', size = 'L', fullWidth, loading, plusIcon, disabled, onClick, children, ...rest }) {
+   return (
+     <button
+       type="button"
+@@ -25,6 +25,7 @@ export default function Button({ variant = 'primary', size = 'L', fullWidth, loa
+       {loading && (
+         <span aria-hidden="true" className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+       )}
++      {plusIcon && <span aria-hidden="true" className="mr-2">＋</span>}
+       {children}
+     </button>
+   );

@@ -1,0 +1,126 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index c452ede..c95ff77 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
+ import SubjectSheet from './SubjectSheet';
+ import SubjectManager from './SubjectManager';
+ import PlanSheet from './PlanSheet';
++import ExamSheet from './ExamSheet';
+ 
+ export function navigate(path: string) {
+   window.history.pushState({}, '', path);
+@@ -28,5 +29,6 @@ export default function App() {
+   if (path.startsWith('/timer/')) return <h1>측정 중 {path.split('/')[2]}</h1>;
+   if (path === '/subjects') return <Shell><SubjectManager /></Shell>;
+   if (path === '/plan') return <Shell title="플래너"><PlanSheet /></Shell>;
++  if (path === '/exams') return <Shell><ExamSheet /></Shell>;
+   return <Shell title="홈"><SubjectSheet /></Shell>;
+ }
+diff --git a/src/ExamSheet.tsx b/src/ExamSheet.tsx
+new file mode 100644
+index 0000000..7449d32
+--- /dev/null
++++ b/src/ExamSheet.tsx
+@@ -0,0 +1,75 @@
++import { useState } from 'react';
++import { navigate } from './App';
++import { createExam } from './api/exams';
++import { useSubjects } from './shared';
++import { BottomSheet, Button, Pressable, SubjectDot, TextField, Toggle } from './ui/index.js';
++
++const MAX = 15;
++
++export default function ExamSheet() {
++  const { subjects, loading } = useSubjects();
++  const [name, setName] = useState('');
++  const [date, setDate] = useState('');
++  const [picked, setPicked] = useState<string | null>(null);
++  const [listing, setListing] = useState(false);
++  const [notify, setNotify] = useState(true);
++
++  if (loading) return null;
++  const pickedId = picked ?? subjects[0]?.id ?? null;
++  const current = subjects.find((s) => s.id === pickedId);
++  const tooLong = name.length > MAX;
++
++  const save = async () => {
++    const { status } = await createExam({ name, subjectId: pickedId!, date, notify });
++    if (status === 201) navigate('/');
++  };
++
++  if (listing) {
++    return (
++      <BottomSheet title="과목 선택">
++        <ul className="flex flex-col gap-2">
++          {subjects.map((s) => (
++            <li key={s.id}>
++              <Pressable variant="option" onClick={() => { setPicked(s.id); setListing(false); }}>
++                <span className="mr-3 flex shrink-0"><SubjectDot color={s.color} /></span>
++                <span className="text-[15px] font-bold text-primary">{s.name}</span>
++              </Pressable>
++            </li>
++          ))}
++        </ul>
++      </BottomSheet>
++    );
++  }
++
++  return (
++    <BottomSheet title="시험 일정 추가">
++      <TextField
++        id="exam-name"
++        aria-label="시험 이름"
++        placeholder="시험 이름"
++        value={name}
++        onChange={setName}
++        error={tooLong ? `시험 이름은 ${MAX}자까지 입력할 수 있어요` : undefined}
++      />
++      <div className="mt-2">
++        <Pressable variant="field" onClick={() => setListing(true)}>
++          <span className="text-[14px] font-medium text-primary">과목</span>
++          <span className="flex items-center text-[14px] text-secondary">
++            {current && <span className="mr-2 flex shrink-0"><SubjectDot color={current.color} /></span>}
++            {current?.name} ›
++          </span>
++        </Pressable>
++      </div>
++      <div className="mt-2">
++        <TextField type="date" aria-label="날짜" value={date} onChange={setDate} />
++      </div>
++      <div className="mt-4 flex items-center justify-between">
++        <span className="text-[14px] font-medium text-primary">시험 하루 전 알림</span>
++        <Toggle aria-label="시험 하루 전 알림" checked={notify} onChange={setNotify} />
++      </div>
++      <div className="mt-4">
++        <Button fullWidth disabled={!name.trim() || tooLong || !date} onClick={save}>저장하기</Button>
++      </div>
++    </BottomSheet>
++  );
++}
+diff --git a/src/api/exams.ts b/src/api/exams.ts
+new file mode 100644
+index 0000000..94ee4a0
+--- /dev/null
++++ b/src/api/exams.ts
+@@ -0,0 +1,4 @@
++import { apiPost } from './subjects'
++import type { Exam } from '../types'
++
++export const createExam = (exam: Exam) => apiPost('/exams', exam)
+diff --git a/src/types.ts b/src/types.ts
+index f850621..f6ebece 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -17,4 +17,11 @@ export type Plan = {
+   notify: boolean
+ }
+ 
++export type Exam = {
++  name: string
++  subjectId: string
++  date: string
++  notify: boolean
++}
++
+ export type ApiResult<T = any> = { status: number; data: T }

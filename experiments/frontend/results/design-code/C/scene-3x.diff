@@ -1,0 +1,68 @@
+diff --git a/src/screens/subject-sheet/Spinner.jsx b/src/screens/subject-sheet/Spinner.jsx
+new file mode 100644
+index 0000000..7714c09
+--- /dev/null
++++ b/src/screens/subject-sheet/Spinner.jsx
+@@ -0,0 +1,8 @@
++export default function Spinner() {
++  return (
++    <span
++      aria-hidden="true"
++      className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
++    />
++  );
++}
+diff --git a/src/screens/subject-sheet/SubjectSheet.tsx b/src/screens/subject-sheet/SubjectSheet.tsx
+index bf7d4b3..2a62554 100644
+--- a/src/screens/subject-sheet/SubjectSheet.tsx
++++ b/src/screens/subject-sheet/SubjectSheet.tsx
+@@ -6,6 +6,7 @@ import { NAME_MAX, STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, activeSubjects, i
+ import type { Subject } from '../../types';
+ import { BottomSheet, Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
+ import OfflineBanner from './OfflineBanner.jsx';
++import Spinner from './Spinner.jsx';
+ import Toast from './Toast.jsx';
+ 
+ const MESSAGES = {
+@@ -30,6 +31,7 @@ export default function SubjectSheet() {
+   const [color, setColor] = useState('blue');
+   const [error, setError] = useState<string | null>(null);
+   const [toast, setToast] = useState(false);
++  const [submitting, setSubmitting] = useState(false);
+   const [online, setOnline] = useState(() => navigator.onLine);
+ 
+   useEffect(() => {
+@@ -77,10 +79,17 @@ export default function SubjectSheet() {
+   const message = tooLong ? MESSAGES.tooLong : error;
+ 
+   const submit = async () => {
+-    if (!subjects) return;
++    if (!subjects || submitting) return;
+     if (subjects.some((s) => s.name === name)) return setError(MESSAGES.same);
+     if (subjects.length >= SUBJECT_MAX) return setError(MESSAGES.limit);
+-    const { status, data } = await createSubject({ name, standardSubject: standard, color });
++    setSubmitting(true);
++    let res;
++    try {
++      res = await createSubject({ name, standardSubject: standard, color });
++    } finally {
++      setSubmitting(false);
++    }
++    const { status, data } = res;
+     if (status === 409) return setError(data.code === 'SUBJECT_LIMIT' ? MESSAGES.limit : MESSAGES.same);
+     setSubjects([data, ...subjects]);
+     setPicked(data.id);
+@@ -108,11 +117,11 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
+             <div className="mt-2 flex flex-wrap gap-2">
+-              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}</Chip>)}
++              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{standard === s && <span aria-hidden="true" className="mr-1">✓</span>}{s}</Chip>)}
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+-            <Button className="mt-5 w-full" disabled={!name || Boolean(message)} onClick={submit}>추가하기</Button>
++            <Button className="mt-5 w-full" disabled={!name || Boolean(message) || submitting} onClick={submit}>{submitting && <Spinner />}추가하기</Button>
+           </div>
+         ) : (
+           <div>

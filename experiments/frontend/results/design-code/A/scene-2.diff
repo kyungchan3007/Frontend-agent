@@ -1,0 +1,50 @@
+diff --git a/src/ui/BottomSheet.jsx b/src/ui/BottomSheet.jsx
+index fae6c36..1e4de56 100644
+--- a/src/ui/BottomSheet.jsx
++++ b/src/ui/BottomSheet.jsx
+@@ -2,7 +2,7 @@ export default function BottomSheet({ title, children }) {
+   return (
+     <div className="absolute inset-0 flex flex-col justify-end bg-dim">
+       <section className="rounded-t-2xl bg-surface px-6 pt-3 pb-6">
+-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-line" />
++        <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-line" />
+         {title && <h2 className="mb-4 text-[20px] font-bold text-primary">{title}</h2>}
+         {children}
+       </section>
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index f47a6fd..a7abd16 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -15,7 +15,7 @@ export default function Button({ variant = 'primary', size = 'L', fullWidth, dis
+       disabled={disabled}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
++        'inline-flex items-center justify-center rounded-xl font-bold active:scale-[0.98] active:opacity-80 disabled:opacity-40',
+         variants[variant],
+         sizes[size],
+         fullWidth && 'w-full',
+diff --git a/src/ui/Pressable.jsx b/src/ui/Pressable.jsx
+index e61672b..4d15352 100644
+--- a/src/ui/Pressable.jsx
++++ b/src/ui/Pressable.jsx
+@@ -5,8 +5,8 @@ const variants = {
+   back: 'text-[20px] font-bold text-primary',
+   link: 'text-[12px] text-secondary',
+   field: 'flex h-[44px] w-full items-center justify-between',
+-  option: 'flex h-[48px] w-full items-center rounded-lg bg-canvas px-4',
+-  card: 'flex h-[63px] w-full items-center rounded-lg border-2 px-4',
++  option: 'flex h-[48px] w-full items-center rounded-xl bg-canvas px-4',
++  card: 'flex h-[63px] w-full items-center rounded-xl border-2 px-4',
+ };
+ 
+ export default function Pressable({ variant = 'plain', selected, onClick, disabled, children, ...rest }) {
+@@ -18,7 +18,7 @@ export default function Pressable({ variant = 'plain', selected, onClick, disabl
+       disabled={disabled}
+       aria-pressed={isCard ? !!selected : undefined}
+       className={cx(
+-        'm-0 border-0 bg-transparent p-0 text-left text-inherit',
++        'm-0 border-0 active:scale-[0.98] bg-transparent p-0 text-left text-inherit',
+         variants[variant],
+         isCard && (selected ? 'border-brand bg-brand-soft' : 'border-transparent bg-canvas'),
+       )}

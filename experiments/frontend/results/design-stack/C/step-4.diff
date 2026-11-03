@@ -1,0 +1,66 @@
+diff --git a/src/api/subjects.ts b/src/api/subjects.ts
+index 5d4b562..6a54664 100644
+--- a/src/api/subjects.ts
++++ b/src/api/subjects.ts
+@@ -24,5 +24,7 @@ export const apiPost = (path: string, body: unknown) =>
+ 
+ export const getSubjects = () => apiGet('/subjects')
+ 
+-export const createSubject = (body: { name: string; standardSubject: string; color: string }) =>
++export const archiveSubject = (id: string | number) => apiPost(`/subjects/${id}/archive`, {})
++
++export const createSubject =(body: { name: string; standardSubject: string; color: string }) =>
+   apiPost('/subjects', body)
+diff --git a/src/screens/subject-manager/ArchiveButton.jsx b/src/screens/subject-manager/ArchiveButton.jsx
+new file mode 100644
+index 0000000..0ed3d56
+--- /dev/null
++++ b/src/screens/subject-manager/ArchiveButton.jsx
+@@ -0,0 +1,12 @@
++export default function ArchiveButton({ onClick, ...rest }) {
++  return (
++    <button
++      type="button"
++      onClick={onClick}
++      className="ml-2 inline-flex h-7 items-center justify-center rounded-md border border-danger bg-surface px-2 text-[12px] font-bold text-danger active:opacity-80 disabled:opacity-40"
++      {...rest}
++    >
++      보관
++    </button>
++  );
++}
+diff --git a/src/screens/subject-manager/SubjectManager.tsx b/src/screens/subject-manager/SubjectManager.tsx
+index 49b2d41..866664b 100644
+--- a/src/screens/subject-manager/SubjectManager.tsx
++++ b/src/screens/subject-manager/SubjectManager.tsx
+@@ -1,7 +1,8 @@
+ import { useState } from 'react';
+ import { navigate } from '../../App';
+-import { createSubject } from '../../api/subjects';
++import { archiveSubject, createSubject } from '../../api/subjects';
+ import { STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, isNameTooLong, useSubjects } from '../../shared';
++import ArchiveButton from './ArchiveButton.jsx';
+ import { Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from '../../ui/index.js';
+ 
+ export default function SubjectManager() {
+@@ -22,6 +23,12 @@ export default function SubjectManager() {
+     setStandard(null);
+   };
+ 
++  const archive = async (id: any) => {
++    const { status } = await archiveSubject(id);
++    if (status !== 200) return;
++    setAll(all.map((x) => (x.id === id ? { ...x, archived: true } : x)));
++  };
++
+   return (
+     <div className="absolute inset-0 flex flex-col bg-canvas px-6 pt-[60px] pb-[34px]">
+       <div className="flex items-center justify-between">
+@@ -35,6 +42,7 @@ export default function SubjectManager() {
+             <SubjectDot color={s.color} className="mr-3" />
+             <span className="flex-1 text-[15px] font-medium text-primary">{s.name}</span>
+             <span className="rounded-full bg-canvas px-2 py-1 text-[12px] font-bold text-secondary">{s.standardSubject}</span>
++            <ArchiveButton onClick={() => archive(s.id)} />
+           </li>
+         ))}
+       </ul>

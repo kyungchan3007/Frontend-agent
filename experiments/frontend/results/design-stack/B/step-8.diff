@@ -1,0 +1,96 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index c452ede..41f562a 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
+ import SubjectSheet from './SubjectSheet';
+ import SubjectManager from './SubjectManager';
+ import PlanSheet from './PlanSheet';
++import ExamSheet from './ExamSheet';
+ 
+ export function navigate(path: string) {
+   window.history.pushState({}, '', path);
+@@ -27,6 +28,7 @@ export default function App() {
+   }, []);
+   if (path.startsWith('/timer/')) return <h1>측정 중 {path.split('/')[2]}</h1>;
+   if (path === '/subjects') return <Shell><SubjectManager /></Shell>;
++  if (path === '/exams') return <Shell title="시험"><ExamSheet /></Shell>;
+   if (path === '/plan') return <Shell title="플래너"><PlanSheet /></Shell>;
+   return <Shell title="홈"><SubjectSheet /></Shell>;
+ }
+diff --git a/src/ExamSheet.tsx b/src/ExamSheet.tsx
+new file mode 100644
+index 0000000..9ce5332
+--- /dev/null
++++ b/src/ExamSheet.tsx
+@@ -0,0 +1,61 @@
++import { useState } from 'react';
++import { navigate } from './App';
++import { createExam } from './api/exams';
++import { NAME_MAX, STANDARD_SUBJECTS as STANDARD, isNameTooLong } from './shared';
++import { BottomSheet, Button, Chip, FieldError, SheetTitle, TextField, TextInput, buttonStyles, buttonSizes, chipStyles, fieldStyles } from './ui/index.js';
++
++const TOO_LONG = `이름은 ${NAME_MAX}자까지 쓸 수 있어요. 조금 줄여 주세요`;
++
++export default function ExamSheet() {
++  const [name, setName] = useState('');
++  const [standard, setStandard] = useState('수학');
++  const [date, setDate] = useState('');
++  const [saving, setSaving] = useState(false);
++
++  const tooLong = isNameTooLong(name);
++
++  const save = async () => {
++    if (saving) return;
++    setSaving(true);
++    try {
++      const { status } = await createExam({ name, standardSubject: standard, date });
++      if (status === 201) navigate('/');
++    } finally {
++      setSaving(false);
++    }
++  };
++
++  return (
++    <BottomSheet>
++      <SheetTitle>시험 일정 추가</SheetTitle>
++      <label htmlFor="exam-name" className="block text-[13px] font-medium text-secondary">시험 이름</label>
++      <div className="mt-2">
++        <TextField className={tooLong ? fieldStyles.invalid : fieldStyles.normal}>
++          <TextInput
++            id="exam-name"
++            value={name}
++            aria-invalid={tooLong ? true : undefined}
++            aria-describedby={tooLong ? 'exam-name-error' : undefined}
++            onChange={setName}
++          />
++          {tooLong && <span aria-hidden="true" className="text-[12px] text-secondary">{name.length}/{NAME_MAX}</span>}
++        </TextField>
++        {tooLong && <FieldError id="exam-name-error">{TOO_LONG}</FieldError>}
++      </div>
++      <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
++      <div className="mt-2 flex flex-wrap gap-2">
++        {STANDARD.map((s) => <Chip key={s} aria-pressed={standard === s} className={standard === s ? chipStyles.on : chipStyles.off} onClick={() => setStandard(s)}>{s}{standard === s && <span aria-hidden="true" className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-current" />}</Chip>)}
++      </div>
++      <label htmlFor="exam-date" className="mt-4 block text-[13px] font-medium text-secondary">날짜</label>
++      <div className="mt-2">
++        <TextField className={fieldStyles.normal}>
++          <TextInput id="exam-date" type="date" value={date} onChange={setDate} />
++        </TextField>
++      </div>
++      <div className="mt-4 flex gap-2">
++        <Button className={`${buttonStyles.ghost} ${buttonSizes.L} flex-1`} onClick={() => navigate('/')}>취소</Button>
++        <Button className={`${buttonStyles.primary} ${buttonSizes.L} flex-1`} disabled={!name.trim() || tooLong || !date || saving} onClick={save}>{saving && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}저장하기</Button>
++      </div>
++    </BottomSheet>
++  );
++}
+diff --git a/src/api/exams.ts b/src/api/exams.ts
+new file mode 100644
+index 0000000..4f87e7d
+--- /dev/null
++++ b/src/api/exams.ts
+@@ -0,0 +1,3 @@
++import { apiPost } from './subjects'
++
++export const createExam = (exam: { name: string; standardSubject: string; date: string }) => apiPost('/exams', exam)

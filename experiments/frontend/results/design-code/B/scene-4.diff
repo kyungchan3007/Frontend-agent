@@ -1,0 +1,93 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index c452ede..84555f4 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
+ import SubjectSheet from './SubjectSheet';
+ import SubjectManager from './SubjectManager';
+ import PlanSheet from './PlanSheet';
++import ExamSheet from './ExamSheet';
+ 
+ export function navigate(path: string) {
+   window.history.pushState({}, '', path);
+@@ -28,5 +29,6 @@ export default function App() {
+   if (path.startsWith('/timer/')) return <h1>측정 중 {path.split('/')[2]}</h1>;
+   if (path === '/subjects') return <Shell><SubjectManager /></Shell>;
+   if (path === '/plan') return <Shell title="플래너"><PlanSheet /></Shell>;
++  if (path === '/exams') return <Shell title="시험"><ExamSheet /></Shell>;
+   return <Shell title="홈"><SubjectSheet /></Shell>;
+ }
+diff --git a/src/ExamSheet.tsx b/src/ExamSheet.tsx
+new file mode 100644
+index 0000000..57f8420
+--- /dev/null
++++ b/src/ExamSheet.tsx
+@@ -0,0 +1,57 @@
++import { useState } from 'react';
++import { navigate } from './App';
++import { createExam } from './api/exams';
++import { NAME_MAX, isNameTooLong, useSubjects } from './shared';
++import { BottomSheet, Button, Chip, FieldError, SheetTitle, TextField, TextInput, Toggle, buttonStyles, buttonSizes, chipStyles, fieldStyles } from './ui/index.js';
++
++export default function ExamSheet() {
++  const { subjects, loading } = useSubjects();
++  const [name, setName] = useState('');
++  const [picked, setPicked] = useState<string | null>(null);
++  const [date, setDate] = useState('');
++  const [notify, setNotify] = useState(true);
++
++  if (loading) return null;
++  const subjectId = picked ?? subjects[0]?.id ?? null;
++  const tooLong = isNameTooLong(name);
++
++  const save = async () => {
++    const { status } = await createExam({ name, subjectId, date, notify });
++    if (status === 201) navigate('/');
++  };
++
++  return (
++    <BottomSheet>
++      <SheetTitle>시험 일정 추가</SheetTitle>
++      <label htmlFor="exam-name" className="block text-[13px] font-medium text-secondary">시험 이름</label>
++      <div className="mt-2">
++        <TextField className={tooLong ? fieldStyles.invalid : fieldStyles.normal}>
++          <TextInput
++            id="exam-name"
++            value={name}
++            aria-invalid={tooLong ? true : undefined}
++            aria-describedby={tooLong ? 'exam-name-error' : undefined}
++            onChange={setName}
++          />
++          {tooLong && <span className="text-[12px] text-secondary">{name.length}/{NAME_MAX}</span>}
++        </TextField>
++        {tooLong && <FieldError id="exam-name-error">{`이름은 ${NAME_MAX}자까지 쓸 수 있어요. 조금 줄여 주세요`}</FieldError>}
++      </div>
++      <p className="mt-4 text-[12px] font-bold text-secondary">과목</p>
++      <div className="mt-2 flex flex-wrap gap-2">
++        {subjects.map((s) => <Chip key={s.id} aria-pressed={subjectId === s.id} className={subjectId === s.id ? chipStyles.on : chipStyles.off} onClick={() => setPicked(s.id)}>{s.name}</Chip>)}
++      </div>
++      <label htmlFor="exam-date" className="mt-4 block text-[13px] font-medium text-secondary">날짜</label>
++      <div className="mt-2">
++        <TextField className={fieldStyles.normal}>
++          <TextInput id="exam-date" type="date" value={date} onChange={setDate} />
++        </TextField>
++      </div>
++      <div className="mt-4 flex items-center justify-between">
++        <span className="text-[14px] font-medium text-primary">시험 하루 전 알림</span>
++        <Toggle aria-label="시험 하루 전 알림" checked={notify} onChange={setNotify} />
++      </div>
++      <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-5 w-full`} disabled={!name || tooLong || !date} onClick={save}>저장하기</Button>
++    </BottomSheet>
++  );
++}
+diff --git a/src/api/exams.ts b/src/api/exams.ts
+new file mode 100644
+index 0000000..ebb227a
+--- /dev/null
++++ b/src/api/exams.ts
+@@ -0,0 +1,5 @@
++import { apiPost } from './subjects'
++
++export type ExamInput = { name: string; subjectId: string | null; date: string; notify: boolean }
++
++export const createExam = (exam: ExamInput) => apiPost('/exams', exam)

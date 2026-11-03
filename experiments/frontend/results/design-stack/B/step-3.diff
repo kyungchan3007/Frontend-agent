@@ -1,0 +1,38 @@
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index 1561a0b..1a65852 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -28,6 +28,7 @@ export default function SubjectSheet() {
+   const [color, setColor] = useState('blue');
+   const [error, setError] = useState<string | null>(null);
+   const [toast, setToast] = useState(false);
++  const [saving, setSaving] = useState(false);
+   const [online, setOnline] = useState(() => navigator.onLine);
+ 
+   useEffect(() => {
+@@ -78,7 +79,15 @@ export default function SubjectSheet() {
+     if (!subjects) return;
+     if (subjects.some((s) => s.name === name)) return setError(MESSAGES.same);
+     if (subjects.length >= SUBJECT_MAX) return setError(MESSAGES.limit);
+-    const { status, data } = await createSubject({ name, standardSubject: standard, color });
++    if (saving) return;
++    setSaving(true);
++    let res;
++    try {
++      res = await createSubject({ name, standardSubject: standard, color });
++    } finally {
++      setSaving(false);
++    }
++    const { status, data } = res;
+     if (status === 409) return setError(data.code === 'SUBJECT_LIMIT' ? MESSAGES.limit : MESSAGES.same);
+     setSubjects([data, ...subjects]);
+     setPicked(data.id);
+@@ -117,7 +126,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+-            <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-5 w-full`} disabled={!name || Boolean(message)} onClick={submit}>추가하기</Button>
++            <Button className={`${buttonStyles.primary} ${buttonSizes.L} mt-5 w-full`} disabled={!name || Boolean(message) || saving} onClick={submit}>{saving && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}추가하기</Button>
+           </div>
+         ) : (
+           <div>
