@@ -1,0 +1,178 @@
+{
+  "A": {
+    "behavior": {
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "bundle": {
+      "modules": 47,
+      "jsKb": 229.9,
+      "gzipKb": 71.2
+    },
+    "dev": {
+      "firstLoadMs": 109,
+      "srcRequests": 30,
+      "duplicateRequests": 0,
+      "typingActiveMs": 14,
+      "named": {
+        "SubjectManager": {
+          "selfMs": 0,
+          "totalMs": 3.9
+        },
+        "useFiber": {
+          "selfMs": 0.1,
+          "totalMs": 0.1
+        },
+        "useSubjects": {
+          "selfMs": 0.1,
+          "totalMs": 0.4
+        },
+        "useSubjectManager": {
+          "selfMs": 0.1,
+          "totalMs": 0.5
+        }
+      }
+    },
+    "structure": {
+      "files": 19,
+      "localImports": 39,
+      "apiPathFiles": 1,
+      "fetchFiles": 1,
+      "nameRuleFiles": 1,
+      "messageFiles": 1,
+      "typeFiles": 3,
+      "pureLogicFiles": [
+        "features/subject-sheet/subjectSheet.api.ts",
+        "features/subject-sheet/subjectSheet.logic.ts",
+        "features/subject-manager/subjectManager.logic.ts",
+        "features/plan-sheet/planSheet.api.ts",
+        "features/plan-sheet/planSheet.logic.ts",
+        "features/common/common.logic.ts"
+      ],
+      "list": [
+        "features/subject-sheet/SubjectSheet.tsx",
+        "features/subject-sheet/subjectSheet.api.ts",
+        "features/subject-sheet/subjectSheet.logic.ts",
+        "features/subject-sheet/subjectSheet.types.ts",
+        "features/subject-sheet/useSubjectSheet.ts",
+        "features/subject-manager/SubjectManager.tsx",
+        "features/subject-manager/subjectManager.api.ts",
+        "features/subject-manager/subjectManager.logic.ts",
+        "features/subject-manager/subjectManager.types.ts",
+        "features/subject-manager/useSubjectManager.ts",
+        "features/plan-sheet/PlanSheet.tsx",
+        "features/plan-sheet/planSheet.api.ts",
+        "features/plan-sheet/planSheet.logic.ts",
+        "features/plan-sheet/planSheet.types.ts",
+        "features/plan-sheet/usePlanSheet.ts",
+        "features/common/common.api.ts",
+        "features/common/common.logic.ts",
+        "features/common/common.types.ts",
+        "features/common/useCommon.ts"
+      ]
+    }
+  },
+  "B": {
+    "behavior": {
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "bundle": {
+      "modules": 39,
+      "jsKb": 228.8,
+      "gzipKb": 70.8
+    },
+    "dev": {
+      "firstLoadMs": 92,
+      "srcRequests": 22,
+      "duplicateRequests": 0,
+      "typingActiveMs": 14.1,
+      "named": {
+        "SubjectManager": {
+          "selfMs": 0.1,
+          "totalMs": 3.8
+        },
+        "useFiber": {
+          "selfMs": 0.1,
+          "totalMs": 0.3
+        },
+        "useSubjects": {
+          "selfMs": 0,
+          "totalMs": 0.3
+        }
+      }
+    },
+    "structure": {
+      "files": 8,
+      "localImports": 21,
+      "apiPathFiles": 1,
+      "fetchFiles": 1,
+      "nameRuleFiles": 1,
+      "messageFiles": 1,
+      "typeFiles": 1,
+      "pureLogicFiles": [
+        "api/plans.ts",
+        "api/sessions.ts"
+      ],
+      "list": [
+        "PlanSheet.tsx",
+        "SubjectManager.tsx",
+        "SubjectSheet.tsx",
+        "shared.ts",
+        "types.ts",
+        "api/plans.ts",
+        "api/sessions.ts",
+        "api/subjects.ts"
+      ]
+    }
+  },
+  "C": {
+    "behavior": {
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "bundle": {
+      "modules": 35,
+      "jsKb": 230.5,
+      "gzipKb": 71.2
+    },
+    "dev": {
+      "firstLoadMs": 97,
+      "srcRequests": 18,
+      "duplicateRequests": 0,
+      "typingActiveMs": 13.5,
+      "named": {
+        "SubjectManager": {
+          "selfMs": 0.1,
+          "totalMs": 3.5
+        },
+        "useFiber": {
+          "selfMs": 0.1,
+          "totalMs": 0.3
+        },
+        "useSubjects": {
+          "selfMs": 0.1,
+          "totalMs": 0.3
+        }
+      }
+    },
+    "structure": {
+      "files": 3,
+      "localImports": 6,
+      "apiPathFiles": 3,
+      "fetchFiles": 3,
+      "nameRuleFiles": 2,
+      "messageFiles": 1,
+      "typeFiles": 3,
+      "pureLogicFiles": [],
+      "list": [
+        "PlanSheet.tsx",
+        "SubjectManager.tsx",
+        "SubjectSheet.tsx"
+      ]
+    }
+  }
+}
