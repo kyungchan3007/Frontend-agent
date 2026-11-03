@@ -67,14 +67,14 @@ export async function enterStage(dir, stage) {
   await fs.rm(path.join(dir, '.gate-tries'), { force: true });
 }
 
-export function claude(cwd, prompt = PROMPT) {
+export function claude(cwd, prompt = PROMPT, extraTools = []) {
   return new Promise((resolve) => {
     const env = { ...process.env };
     for (const v of PARENT_SESSION_VARS) delete env[v];
     const child = spawn('claude', [
       '-p', prompt, '--model', MODEL, '--effort', EFFORT,
       '--output-format', 'stream-json', '--verbose', '--permission-mode', 'dontAsk',
-      '--allowedTools', 'Read', 'Write', 'Edit', 'Glob', 'Grep', 'Bash(node:*)', 'Bash(npx:*)', 'Bash(npm:*)', 'Bash(ls:*)',
+      '--allowedTools', 'Read', 'Write', 'Edit', 'Glob', 'Grep', 'Bash(node:*)', 'Bash(npx:*)', 'Bash(npm:*)', 'Bash(ls:*)', ...extraTools,
       '--setting-sources', 'project', '--strict-mcp-config', '--no-session-persistence',
     ], { cwd, env, stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';

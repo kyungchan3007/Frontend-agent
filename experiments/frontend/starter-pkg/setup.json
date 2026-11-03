@@ -1,0 +1,12 @@
+{
+  "durationMs": 30803,
+  "turns": 12,
+  "uiDocRead": false,
+  "gateRuns": 0,
+  "permissionDenials": 1,
+  "isError": false,
+  "changedFiles": 32,
+  "model": "claude-sonnet-5-5",
+  "effort": "low",
+  "buildOk": true
+}
