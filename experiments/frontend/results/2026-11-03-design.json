@@ -23,6 +23,18 @@
       "pass": 44,
       "total": 44,
       "failed": []
+    },
+    "D2": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
+    },
+    "D3": {
+      "built": true,
+      "pass": 44,
+      "total": 44,
+      "failed": []
     }
   },
   "scene-1": {
@@ -272,6 +284,153 @@
           "M1 20개면 추가할 때 오류",
           "M2 서버 409도 같은 문구",
           "P6 반복 칩 4개가 순서대로"
+        ]
+      }
+    },
+    "D2": {
+      "x": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 14,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 8,
+        "files": [
+          "M\tsrc/PlanSheet.tsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 36,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구"
+        ]
+      }
+    },
+    "D3": {
+      "x": {
+        "isError": false,
+        "gateRuns": 2,
+        "turns": 16,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "M\tsrc/ui/Chip.jsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 9,
+        "files": [
+          "M\tsrc/PlanSheet.tsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 35,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구",
+          "P6 반복 칩 4개가 순서대로"
+        ]
+      }
+    },
+    "D4": {
+      "x": {
+        "isError": false,
+        "gateRuns": 2,
+        "turns": 12,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 8,
+        "files": [
+          "M\tsrc/PlanSheet.tsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 36,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구"
+        ]
+      }
+    },
+    "D5": {
+      "x": {
+        "isError": true,
+        "gateRuns": 1,
+        "turns": null,
+        "files": [
+          "M\tsrc/SubjectSheet.tsx",
+          "M\tsrc/ui/Button.jsx",
+          "A\tsrc/ui/CheckMark.jsx"
+        ]
+      },
+      "y": {
+        "isError": false,
+        "gateRuns": 1,
+        "turns": 8,
+        "files": [
+          "M\tsrc/PlanSheet.tsx"
+        ]
+      },
+      "mergeOk": true,
+      "conflicts": [],
+      "behavior": {
+        "built": true,
+        "pass": 36,
+        "total": 44,
+        "failed": [
+          "E1 최대 길이는 괜찮다",
+          "E2 넘치면 칸 아래 오류와 글자 수",
+          "E3 줄이면 다시 켜진다",
+          "D1 있는 이름으로 추가하면 오류",
+          "D2 이름을 바꾸면 다시 켜진다",
+          "D3 서버 409도 같은 문구",
+          "M1 20개면 추가할 때 오류",
+          "M2 서버 409도 같은 문구"
         ]
       }
     }

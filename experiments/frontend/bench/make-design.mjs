@@ -13,7 +13,7 @@ export const TOOLS = ['Bash(mv:*)', 'Bash(mkdir:*)', 'Bash(cp:*)', 'Bash(rm:*)',
 // 게이트와 보이는 테스트를 넣는다
 export async function addTools(dir, specs = [1, 2, 3]) {
   const copy = (from, to) => fs.cp(from, path.join(dir, to), { recursive: true });
-  await fs.mkdir(path.join(dir, 'tools'));
+  await fs.mkdir(path.join(dir, 'tools'), { recursive: true });
   await copy(path.join(ROOT, 'starter/tools/serve.mjs'), 'tools/serve.mjs');
   for (const f of ['check.mjs', 'stop-gate.mjs']) await copy(path.join(ROOT, 'starter-ds/tools', f), `tools/${f}`);
   await copy(path.join(ROOT, 'starter-mod/tools/mock.mjs'), 'tools/mock.mjs');

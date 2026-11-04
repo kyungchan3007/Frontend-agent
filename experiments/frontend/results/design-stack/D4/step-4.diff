@@ -1,0 +1,57 @@
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index 3288d60..f440144 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -1,6 +1,6 @@
+ import { useState } from 'react';
+ import { navigate } from './App';
+-import { createSubject } from './api/subjects';
++import { archiveSubject, createSubject } from './api/subjects';
+ import { STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, isNameTooLong, useSubjects } from './shared';
+ import { Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from './ui/index.js';
+ 
+@@ -22,6 +22,12 @@ export default function SubjectManager() {
+     setStandard(null);
+   };
+ 
++  const archive = async (id: string | number) => {
++    const { status } = await archiveSubject(id);
++    if (status !== 200) return;
++    setAll(all.map((x) => (x.id === id ? { ...x, archived: true } : x)));
++  };
++
+   return (
+     <div className="absolute inset-0 flex flex-col bg-canvas px-6 pt-[60px] pb-[34px]">
+       <div className="flex items-center justify-between">
+@@ -35,6 +41,7 @@ export default function SubjectManager() {
+             <span className="mr-3 flex"><SubjectDot color={s.color} /></span>
+             <span className="flex-1 text-[15px] font-medium text-primary">{s.name}</span>
+             <span className="rounded-full bg-canvas px-2 py-1 text-[12px] font-bold text-secondary">{s.standardSubject}</span>
++            <div className="ml-2"><Button variant="dangerOutline" size="S" onClick={() => archive(s.id)}>보관</Button></div>
+           </li>
+         ))}
+       </ul>
+diff --git a/src/api/subjects.ts b/src/api/subjects.ts
+index 5d4b562..fa8893b 100644
+--- a/src/api/subjects.ts
++++ b/src/api/subjects.ts
+@@ -24,5 +24,7 @@ export const apiPost = (path: string, body: unknown) =>
+ 
+ export const getSubjects = () => apiGet('/subjects')
+ 
++export const archiveSubject = (id: string | number) => apiPost(`/subjects/${id}/archive`, {})
++
+ export const createSubject = (body: { name: string; standardSubject: string; color: string }) =>
+   apiPost('/subjects', body)
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index 39f917d..5f1badc 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -5,6 +5,7 @@ const variants = {
+   secondary: 'bg-brand-soft text-brand-strong',
+   ghost: 'bg-surface text-primary border border-line',
+   danger: 'bg-danger-strong text-inverse',
++  dangerOutline: 'bg-surface text-danger-strong border border-danger-strong',
+ };
+ const sizes = { L: 'h-13 px-6 text-[17px]', M: 'h-10 px-5 text-[15px]', S: 'h-8 px-3 text-[13px]' };
+ 

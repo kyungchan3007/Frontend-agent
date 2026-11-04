@@ -1,0 +1,12 @@
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 38fe11c..dadbe8a 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -12,6 +12,7 @@ export default function Chip({ selected, onClick, children }) {
+       )}
+     >
+       {children}
++      {selected && <span aria-hidden="true" className="ml-1.5 inline-block size-1.5 rounded-full bg-inverse" />}
+     </button>
+   );
+ }

@@ -1,0 +1,25 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index 89748fa..06a9c96 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -72,7 +72,7 @@ export default function PlanSheet() {
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}>저장하기</Button></div>
++      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}><span aria-hidden="true" className="mr-1.5">✓</span>저장하기</Button></div>
+     </BottomSheet>
+   );
+ }
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 38fe11c..acf20a8 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -12,6 +12,7 @@ export default function Chip({ selected, onClick, children }) {
+       )}
+     >
+       {children}
++      {selected && <span aria-hidden="true" className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-current" />}
+     </button>
+   );
+ }
