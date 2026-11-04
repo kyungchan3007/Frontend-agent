@@ -1,0 +1,16 @@
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index 80f6b3a..c3bed9c 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -156,7 +156,10 @@ export default function SubjectSheet() {
+             {subjects.length > 0 && (
+               <div className="mt-3">
+                 <Button fullWidth onClick={start}>
+-                  {session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}
++                  <span className="flex flex-col items-center leading-tight">
++                    <span>{session ? '이 과목으로 바꾸기' : `${current?.name} 측정 시작`}</span>
++                    <span aria-hidden="true" className="text-[11px] font-medium">목표 2:00</span>
++                  </span>
+                 </Button>
+               </div>
+             )}

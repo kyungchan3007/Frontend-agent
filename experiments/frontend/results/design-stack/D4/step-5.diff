@@ -1,0 +1,99 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index f52317e..f801405 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -3,7 +3,7 @@ import { navigate } from './App';
+ import { createPlan, getPlans } from './api/plans';
+ import { useSubjects } from './shared';
+ import type { Plan } from './types';
+-import { BottomSheet, Button, Chip, Pressable, SubjectDot, TextField, Toggle } from './ui/index.js';
++import { BottomSheet, Button, Chip, ChipDot, Pressable, SubjectDot, TextField, Toggle } from './ui/index.js';
+ 
+ const REPEAT = [['none', '안 함'], ['daily', '매일'], ['weekdays', '평일'], ['custom', '요일 선택']];
+ 
+@@ -71,7 +71,7 @@ export default function PlanSheet() {
+       {overlap && <p className="mt-2 text-[13px] text-caution-strong">겹치는 계획이 있어요</p>}
+       <p className="mt-4 text-[12px] font-bold text-secondary">반복</p>
+       <div className="mt-2 flex gap-2">
+-        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}</Chip>)}
++        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <ChipDot />}</Chip>)}
+       </div>
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-[14px] font-medium text-primary">시작 10분 전 알림</span>
+diff --git a/src/SubjectManager.tsx b/src/SubjectManager.tsx
+index f440144..8b955fd 100644
+--- a/src/SubjectManager.tsx
++++ b/src/SubjectManager.tsx
+@@ -2,7 +2,7 @@ import { useState } from 'react';
+ import { navigate } from './App';
+ import { archiveSubject, createSubject } from './api/subjects';
+ import { STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, isNameTooLong, useSubjects } from './shared';
+-import { Button, Chip, ColorPicker, Pressable, SubjectDot, TextField } from './ui/index.js';
++import { Button, Chip, ChipDot, ColorPicker, Pressable, SubjectDot, TextField } from './ui/index.js';
+ 
+ export default function SubjectManager() {
+   const { subjects, setSubjects: setAll, all, loading } = useSubjects();
+@@ -50,7 +50,7 @@ export default function SubjectManager() {
+         <div className="mt-2"><TextField aria-label="과목 이름" value={name} onChange={setName} /></div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">표준 과목 (과목별 랭킹 기준)</p>
+         <div className="mt-2 flex flex-wrap gap-2">
+-          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}</Chip>)}
++          {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <ChipDot />}</Chip>)}
+         </div>
+         <p className="mt-3 text-[12px] font-bold text-secondary">색</p>
+         <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index d7960b0..80f6b3a 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -4,7 +4,7 @@ import { createSubject, getSubjects } from './api/subjects';
+ import { getCurrentSession, startSession as postSession } from './api/sessions';
+ import { NAME_MAX, STANDARD_SUBJECTS as STANDARD, SUBJECT_MAX, activeSubjects, isNameTooLong } from './shared';
+ import type { Subject } from './types';
+-import { BottomSheet, Button, Chip, ColorPicker, OfflineBanner, Pressable, SubjectDot, TextField, Toast } from './ui/index.js';
++import { BottomSheet, Button, Chip, ChipDot, ColorPicker, OfflineBanner, Pressable, SubjectDot, TextField, Toast } from './ui/index.js';
+ 
+ const MESSAGES = {
+   tooLong: `이름은 ${NAME_MAX}자까지 쓸 수 있어요. 조금 줄여 주세요`,
+@@ -114,7 +114,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">표준 과목</p>
+             <div className="mt-2 flex flex-wrap gap-2">
+-              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}</Chip>)}
++              {STANDARD.map((s) => <Chip key={s} selected={standard === s} onClick={() => setStandard(s)}>{s}{standard === s && <ChipDot />}</Chip>)}
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+diff --git a/src/ui/ChipDot.jsx b/src/ui/ChipDot.jsx
+new file mode 100644
+index 0000000..26afdf6
+--- /dev/null
++++ b/src/ui/ChipDot.jsx
+@@ -0,0 +1,3 @@
++export default function ChipDot() {
++  return <span aria-hidden="true" className="ml-1.5 inline-block size-1.5 shrink-0 rounded-full bg-current" />;
++}
+diff --git a/src/ui/index.d.ts b/src/ui/index.d.ts
+index dc0b983..6260eb8 100644
+--- a/src/ui/index.d.ts
++++ b/src/ui/index.d.ts
+@@ -9,6 +9,7 @@ export const Chip: UI
+ export const TextField: UI
+ export const Toggle: UI
+ export const SubjectDot: UI
++export const ChipDot: UI
+ export const ColorPicker: UI
+ export const BottomSheet: UI
+ export const Toast: UI
+diff --git a/src/ui/index.js b/src/ui/index.js
+index 0aef024..cdd9518 100644
+--- a/src/ui/index.js
++++ b/src/ui/index.js
+@@ -4,6 +4,7 @@ export { default as Chip } from './Chip.jsx';
+ export { default as TextField } from './TextField.jsx';
+ export { default as Toggle } from './Toggle.jsx';
+ export { default as SubjectDot } from './SubjectDot.jsx';
++export { default as ChipDot } from './ChipDot.jsx';
+ export { default as ColorPicker } from './ColorPicker.jsx';
+ export { default as BottomSheet } from './BottomSheet.jsx';
+ export { default as Toast } from './Toast.jsx';

@@ -1,0 +1,80 @@
+diff --git a/src/SubjectSheet.tsx b/src/SubjectSheet.tsx
+index ded0db3..2f82422 100644
+--- a/src/SubjectSheet.tsx
++++ b/src/SubjectSheet.tsx
+@@ -28,6 +28,7 @@ export default function SubjectSheet() {
+   const [color, setColor] = useState('blue');
+   const [error, setError] = useState<string | null>(null);
+   const [toast, setToast] = useState(false);
++  const [submitting, setSubmitting] = useState(false);
+   const [online, setOnline] = useState(() => navigator.onLine);
+ 
+   useEffect(() => {
+@@ -78,7 +79,14 @@ export default function SubjectSheet() {
+     if (!subjects) return;
+     if (subjects.some((s) => s.name === name)) return setError(MESSAGES.same);
+     if (subjects.length >= SUBJECT_MAX) return setError(MESSAGES.limit);
+-    const { status, data } = await createSubject({ name, standardSubject: standard, color });
++    setSubmitting(true);
++    let res;
++    try {
++      res = await createSubject({ name, standardSubject: standard, color });
++    } finally {
++      setSubmitting(false);
++    }
++    const { status, data } = res;
+     if (status === 409) return setError(data.code === 'SUBJECT_LIMIT' ? MESSAGES.limit : MESSAGES.same);
+     setSubjects([data, ...subjects]);
+     setPicked(data.id);
+@@ -110,7 +118,7 @@ export default function SubjectSheet() {
+             </div>
+             <p className="mt-4 text-[12px] font-bold text-secondary">색</p>
+             <div className="mt-2"><ColorPicker value={color} onChange={setColor} /></div>
+-            <div className="mt-5"><Button fullWidth disabled={!name || Boolean(message)} onClick={submit}>추가하기</Button></div>
++            <div className="mt-5"><Button fullWidth loading={submitting} disabled={!name || Boolean(message)} onClick={submit}>추가하기</Button></div>
+           </div>
+         ) : (
+           <div>
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index d9c6495..54e794a 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -8,11 +8,11 @@ const variants = {
+ };
+ const sizes = { L: 'h-13 px-6 text-[17px]', M: 'h-10 px-5 text-[15px]', S: 'h-8 px-3 text-[13px]' };
+ 
+-export default function Button({ variant = 'primary', size = 'L', disabled, onClick, fullWidth, children, ...rest }) {
++export default function Button({ variant = 'primary', size = 'L', disabled, onClick, fullWidth, loading, children, ...rest }) {
+   return (
+     <button
+       type="button"
+-      disabled={disabled}
++      disabled={disabled || loading}
+       onClick={onClick}
+       className={cx(
+         'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
+@@ -22,6 +22,12 @@ export default function Button({ variant = 'primary', size = 'L', disabled, onCl
+       )}
+       {...rest}
+     >
++      {loading && (
++        <span
++          aria-hidden="true"
++          className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
++        />
++      )}
+       {children}
+     </button>
+   );
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 38fe11c..8befd3e 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -11,6 +11,7 @@ export default function Chip({ selected, onClick, children }) {
+         selected ? 'bg-primary text-inverse' : 'border border-line bg-surface text-secondary',
+       )}
+     >
++      {selected && <span aria-hidden="true" className="mr-1">✓</span>}
+       {children}
+     </button>
+   );

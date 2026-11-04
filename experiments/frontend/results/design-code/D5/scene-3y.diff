@@ -1,0 +1,21 @@
+diff --git a/src/PlanSheet.tsx b/src/PlanSheet.tsx
+index 89748fa..0c1a1c4 100644
+--- a/src/PlanSheet.tsx
++++ b/src/PlanSheet.tsx
+@@ -65,14 +65,14 @@ export default function PlanSheet() {
+       {overlap && <p className="mt-2 text-[13px] text-caution-strong">겹치는 계획이 있어요</p>}
+       <p className="mt-4 text-[12px] font-bold text-secondary">반복</p>
+       <div className="mt-2 flex gap-2">
+-        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}</Chip>)}
++        {REPEAT.map(([k, label]) => <Chip key={k} selected={repeat === k} onClick={() => setRepeat(k)}>{label}{repeat === k && <span aria-hidden="true" className="ml-1 inline-block size-1.5 rounded-full bg-current" />}</Chip>)}
+       </div>
+       <div className="mt-4 flex items-center justify-between">
+         <span className="text-[14px] font-medium text-primary">시작 10분 전 알림</span>
+         <Toggle aria-label="시작 10분 전 알림" checked={notify} onChange={setNotify} />
+       </div>
+       <p className="mt-2 text-[12px] text-caution-strong">⏱ 시작 30분이 지나도 측정하지 않으면 경고 딱지가 쌓여요</p>
+-      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}>저장하기</Button></div>
++      <div className="mt-4"><Button fullWidth disabled={end <= start} onClick={save}><span aria-hidden="true" className="mr-1">✓</span>저장하기</Button></div>
+     </BottomSheet>
+   );
+ }

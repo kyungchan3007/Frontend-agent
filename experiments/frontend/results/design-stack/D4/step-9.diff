@@ -1,0 +1,94 @@
+diff --git a/src/ui/Button.jsx b/src/ui/Button.jsx
+index 5f1badc..628e1e7 100644
+--- a/src/ui/Button.jsx
++++ b/src/ui/Button.jsx
+@@ -16,14 +16,14 @@ export default function Button({ variant = 'primary', size = 'L', disabled, onCl
+       disabled={disabled || loading}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex items-center justify-center rounded-md font-bold active:opacity-80 disabled:opacity-40',
++        'inline-flex items-center justify-center rounded-xl font-bold active:scale-[0.98] active:opacity-80 disabled:opacity-40',
+         variants[variant],
+         sizes[size],
+         fullWidth && 'w-full',
+       )}
+       {...rest}
+     >
+-      {loading && <span aria-hidden="true" className="mr-2 inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
++      {loading && <span aria-hidden="true" className="mr-2 inline-block h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />}
+       {children}
+     </button>
+   );
+diff --git a/src/ui/Chip.jsx b/src/ui/Chip.jsx
+index 38fe11c..789fea9 100644
+--- a/src/ui/Chip.jsx
++++ b/src/ui/Chip.jsx
+@@ -7,7 +7,7 @@ export default function Chip({ selected, onClick, children }) {
+       aria-pressed={!!selected}
+       onClick={onClick}
+       className={cx(
+-        'inline-flex h-8 items-center rounded-full px-3 text-[13px] font-bold',
++        'inline-flex h-8 items-center rounded-xl active:scale-[0.98] px-3 text-[13px] font-bold',
+         selected ? 'bg-primary text-inverse' : 'border border-line bg-surface text-secondary',
+       )}
+     >
+diff --git a/src/ui/ChipDot.jsx b/src/ui/ChipDot.jsx
+index 26afdf6..5172ee6 100644
+--- a/src/ui/ChipDot.jsx
++++ b/src/ui/ChipDot.jsx
+@@ -1,3 +1,3 @@
+ export default function ChipDot() {
+-  return <span aria-hidden="true" className="ml-1.5 inline-block size-1.5 shrink-0 rounded-full bg-current" />;
++  return <span aria-hidden="true" className="ml-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-current" />;
+ }
+diff --git a/src/ui/ColorPicker.jsx b/src/ui/ColorPicker.jsx
+index 370ade6..ccf3ba0 100644
+--- a/src/ui/ColorPicker.jsx
++++ b/src/ui/ColorPicker.jsx
+@@ -12,7 +12,7 @@ export default function ColorPicker({ value, onChange }) {
+           aria-pressed={value === key}
+           onClick={() => onChange?.(key)}
+           className={cx(
+-            'size-8 rounded-full border-2',
++            'size-8 rounded-xl border-2 active:scale-[0.98]',
+             SUBJECT_COLORS[key],
+             value === key ? 'border-primary' : 'border-transparent',
+           )}
+diff --git a/src/ui/Pressable.jsx b/src/ui/Pressable.jsx
+index a54277b..0899bd0 100644
+--- a/src/ui/Pressable.jsx
++++ b/src/ui/Pressable.jsx
+@@ -2,9 +2,9 @@ import { cx } from './cx.js';
+ 
+ const variants = {
+   plain: '',
+-  row: 'flex h-[48px] w-full items-center rounded-lg bg-canvas px-4',
++  row: 'flex h-[48px] w-full items-center rounded-xl bg-canvas px-4',
+   field: 'flex h-[44px] w-full items-center justify-between',
+-  option: 'flex h-[63px] w-full items-center rounded-lg border-2 px-4',
++  option: 'flex h-[63px] w-full items-center rounded-xl border-2 px-4',
+ };
+ 
+ export default function Pressable({ variant = 'plain', selected, onClick, disabled, children, ...rest }) {
+@@ -14,7 +14,7 @@ export default function Pressable({ variant = 'plain', selected, onClick, disabl
+       onClick={onClick}
+       disabled={disabled}
+       className={cx(
+-        'm-0 border-0 bg-transparent p-0 text-left text-inherit',
++        'm-0 rounded-xl border-0 bg-transparent p-0 text-left text-inherit active:scale-[0.98]',
+         variants[variant],
+         variant === 'option' && (selected ? 'border-brand bg-brand-soft' : 'border-transparent bg-canvas'),
+       )}
+diff --git a/src/ui/Toggle.jsx b/src/ui/Toggle.jsx
+index f169a85..fec3a0b 100644
+--- a/src/ui/Toggle.jsx
++++ b/src/ui/Toggle.jsx
+@@ -8,7 +8,7 @@ export default function Toggle({ checked, onChange, 'aria-label': ariaLabel }) {
+       aria-checked={!!checked}
+       aria-label={ariaLabel}
+       onClick={() => onChange?.(!checked)}
+-      className="inline-flex h-11 items-center bg-transparent p-0"
++      className="inline-flex h-11 items-center rounded-xl bg-transparent p-0 active:scale-[0.98]"
+     >
+       <span className={cx('relative block h-7 w-12 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line')}>
+         <span
