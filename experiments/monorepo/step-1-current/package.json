@@ -1,0 +1,12 @@
+{
+  "name": "step-1-current",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.10"
+  }
+}
