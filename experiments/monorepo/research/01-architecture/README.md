@@ -1,6 +1,6 @@
 # 터보레포에서 앱 내부를 어떤 구조로 나눌까
 
-관련 이슈: [#35](https://github.com/kyungchan3007/frontend-architecture/issues/35) · 실험 이슈: [#34](https://github.com/kyungchan3007/frontend-architecture/issues/34)
+관련 이슈: [#37](https://github.com/kyungchan3007/frontend-architecture/issues/37) · 실험 이슈: [#34](https://github.com/kyungchan3007/frontend-architecture/issues/34)
 
 후보마다 공식 문서를 확인하고, 근거가 되는 문장은 노란색으로 표시해 스크린샷으로 남겼습니다.
 
@@ -42,6 +42,6 @@
 ### 이번 실험에 연결해 본 생각 (논의 대상)
 
 - **`apps/`와 `packages/`:** 서비스 3개를 `apps/`에, 공용 코드를 `packages/`에 두는 것은 현업 구조와 같습니다.
-- **공용 패키지를 하나로 둘지, 목적별로 나눌지:** 현업에서는 공용 패키지 하나 안에 9개 카테고리를 두었습니다. 문서는 목적별로 나누기를 권하지만, 규모와 팀에 따라 정하라고 합니다.
+- **공용 패키지 나누는 단위:** 현업에서도 앱 간 공유 코드는 `packages/` 아래 목적별 패키지(`ui`, `design-tokens` 등)로 나누었고, 문서 권장과 같습니다. 한 도메인 안에서만 쓰는 코드는 그 앱의 `shared/`에 두었습니다.
 - **서비스 공통 코드의 위치:** 한 서비스 안에서만 쓰는 공통 코드는 다른 앱과 공유하지 않으니, 앱 안에 두어도 문서 권장과 어긋나지 않는다고 봤습니다.
 - **barrel 파일:** 공용 패키지에서 `index`로 한 번에 내보내기보다, `exports`로 경로를 나누는 쪽을 검토할 만해 보입니다.
