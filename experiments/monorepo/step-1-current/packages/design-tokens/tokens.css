@@ -1,0 +1,26 @@
+/* 디자인 토큰의 원본. Palette(실제 값) → Semantic(쓰임새 이름) 두 단계 */
+:root {
+  /* Palette */
+  --palette-blue-600: #2563eb;
+  --palette-blue-700: #1d4ed8;
+  --palette-gray-50: #f9fafb;
+  --palette-gray-200: #e5e7eb;
+  --palette-gray-500: #6b7280;
+  --palette-gray-900: #111827;
+  --palette-green-600: #16a34a;
+  --palette-amber-600: #d97706;
+  --palette-red-600: #dc2626;
+  --palette-white: #ffffff;
+
+  /* Semantic */
+  --primary: var(--palette-blue-600);
+  --primary-hover: var(--palette-blue-700);
+  --bg: var(--palette-gray-50);
+  --surface: var(--palette-white);
+  --border: var(--palette-gray-200);
+  --text: var(--palette-gray-900);
+  --text-muted: var(--palette-gray-500);
+  --status-available: var(--palette-green-600);
+  --status-loaned: var(--palette-amber-600);
+  --status-overdue: var(--palette-red-600);
+}

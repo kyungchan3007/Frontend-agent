@@ -1,0 +1,16 @@
+/* Tailwind v4 연결. tokens.css의 Semantic 변수(--primary 등)를 Tailwind 색 이름(--color-primary)으로 노출해
+   text-primary 같은 클래스로 쓸 수 있게 한다.
+   - 다른 변수를 가리키므로 inline을 쓴다 (Tailwind 문서 "Referencing other variables")
+   - 토큰 이름과 Tailwind 이름을 나눠 자기 참조를 피한다 (shadcn/ui 문서 "Theming") */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-status-available: var(--status-available);
+  --color-status-loaned: var(--status-loaned);
+  --color-status-overdue: var(--status-overdue);
+}
