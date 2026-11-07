@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@repo/design-tokens": "workspace:*",
+    "@repo/ui": "workspace:*",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
